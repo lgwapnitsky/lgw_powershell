@@ -30,3 +30,16 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
+Delete-AQSUser.ps1
+Devfarm.PowerSE_profile.ps1
+JSOX/APPS/APPS_DLLs_1.ps1
+JSOX/APPS/APPS_DLLs_2.ps1
+JSOX/AQS/AQS_DLLs.ps1
+JSOX/AQS_DLLs.ps1
+python/addm_scan_parsing/.project
+python/addm_scan_parsing/.pydevproject
+python/addm_scan_parsing/addm_scan_parse.py
+Sharepoint/ContentDB/AttachContentDatabase(JAMS).ps1
+Sharepoint/ContentDB/DetachContentDatabase(JAMS).ps1
+Sharepoint/IO3799/suggestionboxtest1.ps1
+Sharepoint/IO3799/suggestionboxtest2.ps1
