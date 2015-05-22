@@ -1,0 +1,22 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ACA_TownCode]') AND type in (N'U'))
+DROP TABLE [dbo].[ACA_TownCode]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ACA_TownCode]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[ACA_TownCode](
+	[ACATownCodeID] [int] IDENTITY(1,1) NOT NULL,
+	[State] [char](2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[City] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[Zip] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[TownCode] [int] NULL,
+ CONSTRAINT [PK_ACA_TownCode] PRIMARY KEY CLUSTERED 
+(
+	[ACATownCodeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO

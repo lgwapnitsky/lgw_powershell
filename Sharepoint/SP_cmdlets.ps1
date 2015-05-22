@@ -103,6 +103,6 @@ function global:SPUser-CreateUserCSV
 			[string]$RoleDef
 	)
 
-	#Import-Csv $CSVFile | ForEach-Object { SPUser-CreateUser -url $url -LoginName $_.NTAccountName -Name $_.Name -Email $_.Email -RoleDef $RoleDef }
-	Import-Csv $CSVFile | ForEach-Object { SPUser-CreateUser -url $url -LoginName $_.NTAccountName -RoleDef $RoleDef }
+	Import-Csv $CSVFile | ForEach-Object { SPUser-CreateUser -url $url -LoginName $_.NTAccountName -Name $_.Name -Email $_.Email -RoleDef $RoleDef }
+	#Import-Csv $CSVFile | ForEach-Object { SPUser-CreateUser -url $url -LoginName $_.NTAccountName -RoleDef $RoleDef }
 }

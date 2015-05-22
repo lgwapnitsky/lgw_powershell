@@ -1,0 +1,183 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Arch_GRUNDY_LossPay]') AND type in (N'U'))
+DROP TABLE [dbo].[Arch_GRUNDY_LossPay]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Arch_GRUNDY_LossPay]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Arch_GRUNDY_LossPay](
+	[Arch_GRUNDY_LossPay_ID] [int] IDENTITY(1,1) NOT NULL,
+	[REC_NUM] [nvarchar](5) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[POLICY_NUM] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[SUB_AGENT] [nvarchar](3) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[ENDORSEMENT] [nvarchar](3) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[INSURED] [nvarchar](25) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[DATE_ISSUE] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[EFFECT_DAT] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[LOSS_PAY_1] [nvarchar](35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[LOSS_PAY_1b] [nvarchar](35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[LOSS_PAY_2] [nvarchar](35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[LOSS_PAY_2b] [nvarchar](35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[LOSS_PAY_3] [nvarchar](35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[LOSS_PAY_3b] [nvarchar](35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[LOSS_PAY_4] [nvarchar](35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[LOSS_PAY_4b] [nvarchar](35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[NOTES_01] [nvarchar](74) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[NOTES_02] [nvarchar](74) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[NOTES_03] [nvarchar](74) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[POST_FLAG] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[PRINT_FLAG] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[TRANS_FLAG] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[REMT_P_FLG] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[RecordStatus] [nvarchar](2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[UpdateDate] [datetime] NULL,
+	[TransDate] [varchar](8) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+) ON [PRIMARY]
+END
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_REC_NUM]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_REC_NUM]  DEFAULT (' ') FOR [REC_NUM]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_POLICY_NUM]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_POLICY_NUM]  DEFAULT (' ') FOR [POLICY_NUM]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_SUB_AGENT]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_SUB_AGENT]  DEFAULT (' ') FOR [SUB_AGENT]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_ENDORSEMENT]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_ENDORSEMENT]  DEFAULT (' ') FOR [ENDORSEMENT]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_INSURED]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_INSURED]  DEFAULT (' ') FOR [INSURED]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_DATE_ISSUE]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_DATE_ISSUE]  DEFAULT (' ') FOR [DATE_ISSUE]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_EFFECT_DAT]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_EFFECT_DAT]  DEFAULT (' ') FOR [EFFECT_DAT]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_LOSS_PAY_1]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_LOSS_PAY_1]  DEFAULT (' ') FOR [LOSS_PAY_1]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_LOSS_PAY_1b]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_LOSS_PAY_1b]  DEFAULT (' ') FOR [LOSS_PAY_1b]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_LOSS_PAY_2]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_LOSS_PAY_2]  DEFAULT (' ') FOR [LOSS_PAY_2]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_LOSS_PAY_2b]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_LOSS_PAY_2b]  DEFAULT (' ') FOR [LOSS_PAY_2b]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_LOSS_PAY_3]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_LOSS_PAY_3]  DEFAULT (' ') FOR [LOSS_PAY_3]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_LOSS_PAY_3b]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_LOSS_PAY_3b]  DEFAULT (' ') FOR [LOSS_PAY_3b]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_LOSS_PAY_4]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_LOSS_PAY_4]  DEFAULT (' ') FOR [LOSS_PAY_4]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_LOSS_PAY_4b]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_LOSS_PAY_4b]  DEFAULT (' ') FOR [LOSS_PAY_4b]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_NOTES_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_NOTES_01]  DEFAULT (' ') FOR [NOTES_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_NOTES_02]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_NOTES_02]  DEFAULT (' ') FOR [NOTES_02]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_NOTES_03]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_NOTES_03]  DEFAULT (' ') FOR [NOTES_03]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_POST_FLAG]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_POST_FLAG]  DEFAULT (' ') FOR [POST_FLAG]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_PRINT_FLAG]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_PRINT_FLAG]  DEFAULT (' ') FOR [PRINT_FLAG]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_TRANS_FLAG]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_TRANS_FLAG]  DEFAULT (' ') FOR [TRANS_FLAG]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_REMT_P_FLG]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_REMT_P_FLG]  DEFAULT (' ') FOR [REMT_P_FLG]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_LossPay_UpdateDate]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  CONSTRAINT [DF_Arch_GRUNDY_LossPay_UpdateDate]  DEFAULT (getdate()) FOR [UpdateDate]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF__arch_grun__Trans__0CC5D56F]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_LossPay] ADD  DEFAULT (' ') FOR [TransDate]
+END
+
+GO

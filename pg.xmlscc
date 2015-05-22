@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\.project</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\AdminMembers.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\commissions.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\DDERpt.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\Delete-AQSUser.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\Devfarm.PowerSE_profile.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\dyntest.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\EnumerateGroups.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\enumerateuser.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\fileremove.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\Get-SharePermissions.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\gethostinfo.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\get_share_permissions_mod.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\gpg testing.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\grouplist.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\Icon_Exporter.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\ImageRight_ClaimsFix1.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\local_group_removal.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\Microsoft.PowerShellISE_profile.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\OutputUserNames.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\PHLYNT_Everyone_1.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\PHLYNT_Everyone_2.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\PHLYNT_Everyone_3.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\PHLYNT_Everyone_4.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\PHLYNT_Everyone_size_analysis.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\pingcheck.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\pingcheck_simple.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\ProCedeUsers.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\regex1.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\remedy_prod_servers.txt</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\servers.txt</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\test.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser>CORP\lwapnits</sUser>
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser>CORP\lwapnits</sUser>
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\AQSLastLogin.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+</ArrayOfFileProjectInfo>

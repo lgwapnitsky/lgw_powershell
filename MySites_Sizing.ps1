@@ -1,13 +1,13 @@
-﻿# Trap {
-	# $err = $_.Exception
-	# write-error $err.Message
-	# while ( $err.InnerException) 
-	# {
-		# $err = $err.InnerException
-		# Write-Error $err.Message
-	# }
-	# break;
-# }
+﻿Trap {
+	$err = $_.Exception
+	write-error $err.Message
+	while ( $err.InnerException) 
+	{
+		$err = $err.InnerException
+		Write-Error $err.Message
+	}
+	break;
+}
 
 Set-PSDebug -Strict
 $ErrorActionPreference = "stop"

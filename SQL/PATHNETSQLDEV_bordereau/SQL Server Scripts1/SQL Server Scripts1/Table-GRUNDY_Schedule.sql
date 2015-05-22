@@ -1,0 +1,117 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GRUNDY_Schedule]') AND type in (N'U'))
+DROP TABLE [dbo].[GRUNDY_Schedule]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GRUNDY_Schedule]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[GRUNDY_Schedule](
+	[GRUNDY_Schedule_ID] [int] IDENTITY(1,1) NOT NULL,
+	[POLICY_NUM] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[EFFECT_DATE] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[CAR_01] [nvarchar](3) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[ID_CARD_PR_01] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[YEAR_01] [nvarchar](4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[MAKE_01] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[TYPE_01] [nvarchar](8) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[VIN_SER_01] [nvarchar](25) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[AMT_ACV_01] [nvarchar](7) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[AMT_COMP_01] [nvarchar](7) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[AMT_COLL_01] [nvarchar](7) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[RecordStatus] [nvarchar](2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[UpdateDate] [datetime] NULL,
+	[REMT_P_FLAG] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[TransDate] [varchar](8) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+ CONSTRAINT [PK_GRUNDY_Schedule] PRIMARY KEY CLUSTERED 
+(
+	[GRUNDY_Schedule_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_POLICY_NUM]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_POLICY_NUM]  DEFAULT (' ') FOR [POLICY_NUM]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_EFFECT_DATE]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_EFFECT_DATE]  DEFAULT (' ') FOR [EFFECT_DATE]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_CAR_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_CAR_01]  DEFAULT (' ') FOR [CAR_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_ID_CARD_PR_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_ID_CARD_PR_01]  DEFAULT (' ') FOR [ID_CARD_PR_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_YEAR_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_YEAR_01]  DEFAULT (' ') FOR [YEAR_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_MAKE_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_MAKE_01]  DEFAULT (' ') FOR [MAKE_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_TYPE_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_TYPE_01]  DEFAULT (' ') FOR [TYPE_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_VIN_SER_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_VIN_SER_01]  DEFAULT (' ') FOR [VIN_SER_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_AMT_ACV_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_AMT_ACV_01]  DEFAULT (' ') FOR [AMT_ACV_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_AMT_COMP_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_AMT_COMP_01]  DEFAULT (' ') FOR [AMT_COMP_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_AMT_COLL_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_AMT_COLL_01]  DEFAULT (' ') FOR [AMT_COLL_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_UpdateDate]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_UpdateDate]  DEFAULT (getdate()) FOR [UpdateDate]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_GRUNDY_Schedule_REMT_P_FLAG]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  CONSTRAINT [DF_GRUNDY_Schedule_REMT_P_FLAG]  DEFAULT (' ') FOR [REMT_P_FLAG]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF__grundy_sc__Trans__0EAE1DE1]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[GRUNDY_Schedule] ADD  DEFAULT (' ') FOR [TransDate]
+END
+
+GO

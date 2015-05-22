@@ -1,0 +1,1150 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[usp_Step_3_Premium_Loss_Join]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[usp_Step_3_Premium_Loss_Join]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[usp_Step_3_Premium_Loss_Join]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'
+
+
+
+
+
+
+
+
+
+CREATE procedure [dbo].[usp_Step_3_Premium_Loss_Join] as
+
+update Detailed_Experience_Run_Log set Start_Time=GETDATE()
+where Step_Name=OBJECT_NAME(@@Procid)
+and Run_Month=(select Last_Reporting_Month from Detailed_Experience_Parameters)
+and Run_Year=(select Last_Reporting_Year from Detailed_Experience_Parameters)
+
+/* Step 1 */
+
+/* Pull in Missing Loss Records from the accident state table. This will produce the least redundant data - the premium state information that matches to a missing accident states will get populated in the next step, and then the premium states still missing will get filled in in the last step.*/ 
+
+insert into Act_Detailed_Experience.dbo.ALL_POLICIES_12_premium_summary_work
+select
+	AL.accountnumber as accountnumber,
+	AL.Policynumber as Policynumber,
+	NULL as policyeffectivedate,
+--	policyexpirationdate = NULL,
+	AL.Accident_State_for_join as statecode,
+--	Coverage_id = AL.Coverage_id,
+	AL.Coverage_group as Coverage_group,
+	isnull(crg.Coverage_Reporting_Group,''Other'') as Coverage_Reporting_group,
+	AL.Coverage_Form as Coverage_Form,
+AL.productcode as productcode,
+AL.ExperienceProduct as experienceproduct,
+AL.Fiscal_AY_Month_Ending as Fiscal_AY_Month_Ending,
+AL.Fiscal_AY_Year as Fiscal_AY_Year,
+AL.Accident_Year as acctngyear,
+AL.Loss_Evaluation_Year as Last_Reporting_Year,
+AL.Loss_Evaluation_Month as Last_Reporting_Month,
+0.0 as currentwrittenpremium,
+0.0 as currentearnedpremium,
+0 as Policy_count_All_Cov_Combined_WP,
+0 as Policy_count_Reporting_Coverage_WP,
+0 as Policy_count_Coverage_Group_WP,
+0.0 as Policy_count_All_Cov_Combined,
+0.0 as Policy_count_Reporting_Coverage,
+0.0 as Policy_count_Coverage_Group,
+0 as Policy_count_All_Cov_Combined_Total,
+0 as Policy_count_Reporting_Coverage_Total,
+0 as Policy_count_Coverage_Group_Total,
+AL.Loss_Evaluation_Month as Loss_Evaluation_Month,
+AL.Loss_Evaluation_Year as Loss_Evaluation_Year,
+AL.Loss_ALAE_Cap as Loss_ALAE_Cap,
+AL.COL_Breach_of_Contract_Count as COL_Breach_of_Contract_Count,
+AL.COL_Breach_of_Contract_Count_rptd as COL_Breach_of_Contract_Count_rptd,
+AL.COL_Breach_of_Contract_Loss as COL_Breach_of_Contract_Loss,
+AL.COL_Discrimination_Count as COL_Discrimination_Count,
+AL.COL_Discrimination_Count_rptd as COL_Discrimination_Count_rptd,
+AL.COL_Discrimination_Loss as COL_Discrimination_Loss,
+AL.COL_Wrongful_Termination_Count as COL_Wrongful_Termination_Count,
+AL.COL_Wrongful_Termination_Count_rptd as COL_Wrongful_Termination_Count_rptd,
+AL.COL_Wrongful_Termination_Loss as COL_Wrongful_Termination_Loss,
+AL.COL_Harrassment_Count as COL_Harrassment_Count,
+AL.COL_Harrassment_Count_rptd as COL_Harrassment_Count_rptd,
+AL.COL_Harrassment_Loss as COL_Harrassment_Loss,
+AL.COL_DO_Other_Count as COL_DO_Other_Count,
+AL.COL_DO_Other_Count_rptd as COL_DO_Other_Count_rptd,
+AL.COL_DO_Other_Loss as COL_DO_Other_Loss,
+AL.COL_EPL_Other_Count as COL_EPL_Other_Count,
+AL.COL_EPL_Other_Count_rptd as COL_EPL_Other_Count_rptd,
+AL.COL_EPL_Other_Loss as COL_EPL_Other_Loss,
+AL.COL_Fiduciary_Other_Count as COL_Fiduciary_Other_Count,
+AL.COL_Fiduciary_Other_Count_rptd as COL_Fiduciary_Other_Count_rptd,
+AL.COL_Fiduciary_Other_Loss as COL_Fiduciary_Other_Loss,
+AL.COL_Worplace_Violence_Other_Count as COL_Worplace_Violence_Other_Count,
+AL.COL_Worplace_Violence_Other_Count_rptd as COL_Worplace_Violence_Other_Count_rptd,
+AL.COL_Worplace_Violence_Other_Loss as COL_Worplace_Violence_Other_Loss,
+AL.COL_Internet_Other_Count as COL_Internet_Other_Count,
+AL.COL_Internet_Other_Count_rptd as COL_Internet_Other_Count_rptd,
+AL.COL_Internet_Other_Loss as COL_Internet_Other_Loss,
+AL.COL_SLD_All_Other_Count as COL_SLD_All_Other_Count,
+AL.COL_SLD_All_Other_Count_rptd as COL_SLD_All_Other_Count_rptd,
+AL.COL_SLD_All_Other_Loss as COL_SLD_All_Other_Loss,
+AL.COL_AE_Breach_of_Contract_Count as COL_AE_Breach_of_Contract_Count,
+AL.COL_AE_Breach_of_Contract_Count_rptd as COL_AE_Breach_of_Contract_Count_rptd,
+AL.COL_AE_Breach_of_Contract_Loss as COL_AE_Breach_of_Contract_Loss,
+AL.COL_AE_Breach_of_Fiduciary_Liability_Count as COL_AE_Breach_of_Fiduciary_Liability_Count,
+AL.COL_AE_Breach_of_Fiduciary_Liability_Count_rptd as COL_AE_Breach_of_Fiduciary_Liability_Count_rptd,
+AL.COL_AE_Breach_of_Fiduciary_Liability_Loss as COL_AE_Breach_of_Fiduciary_Liability_Loss,
+AL.COL_AE_Financial_Advisor_Count as COL_AE_Financial_Advisor_Count,
+AL.COL_AE_Financial_Advisor_Count_rptd as COL_AE_Financial_Advisor_Count_rptd,
+AL.COL_AE_Financial_Advisor_Loss as COL_AE_Financial_Advisor_Loss,
+AL.COL_AE_Misconduct_Count as COL_AE_Misconduct_Count,
+AL.COL_AE_Misconduct_Count_rptd as COL_AE_Misconduct_Count_rptd,
+AL.COL_AE_Misconduct_Loss as COL_AE_Misconduct_Loss,
+AL.COL_AE_Wills_Estate_Count as COL_AE_Wills_Estate_Count,
+AL.COL_AE_Wills_Estate_Count_rptd as COL_AE_Wills_Estate_Count_rptd,
+AL.COL_AE_Wills_Estate_Loss as COL_AE_Wills_Estate_Loss,
+AL.COL_AE_Corporate_Count as COL_AE_Corporate_Count,
+AL.COL_AE_Corporate_Count_rptd as COL_AE_Corporate_Count_rptd,
+AL.COL_AE_Corporate_Loss as COL_AE_Corporate_Loss,
+AL.COL_AE_Tax_Liability_Count as COL_AE_Tax_Liability_Count,
+AL.COL_AE_Tax_Liability_Count_rptd as COL_AE_Tax_Liability_Count_rptd,
+AL.COL_AE_Tax_Liability_Loss as COL_AE_Tax_Liability_Loss,
+AL.COL_AE_Violation_GAAP_Count as COL_AE_Violation_GAAP_Count,
+AL.COL_AE_Violation_GAAP_Count_rptd as COL_AE_Violation_GAAP_Count_rptd,
+AL.COL_AE_Violation_GAAP_Loss as COL_AE_Violation_GAAP_Loss,
+AL.COL_AE_All_Other_Count as COL_AE_All_Other_Count,
+AL.COL_AE_All_Other_Count_rptd as COL_AE_All_Other_Count_rptd,
+AL.COL_AE_All_Other_Loss as COL_AE_All_Other_Loss,
+AL.COL_CL_Breach_of_Contract_Count as COL_CL_Breach_of_Contract_Count,
+AL.COL_CL_Breach_of_Contract_Count_rptd as COL_CL_Breach_of_Contract_Count_rptd,
+AL.COL_CL_Breach_of_Contract_Loss as COL_CL_Breach_of_Contract_Loss,
+AL.COL_CL_Breach_of_Fiduciary_Liability_Count as COL_CL_Breach_of_Fiduciary_Liability_Count,
+AL.COL_CL_Breach_of_Fiduciary_Liability_Count_rptd as COL_CL_Breach_of_Fiduciary_Liability_Count_rptd,
+AL.COL_CL_Breach_of_Fiduciary_Liability_Loss as COL_CL_Breach_of_Fiduciary_Liability_Loss,
+AL.COL_CL_Financial_Advisor_Count as COL_CL_Financial_Advisor_Count,
+AL.COL_CL_Financial_Advisor_Count_rptd as COL_CL_Financial_Advisor_Count_rptd,
+AL.COL_CL_Financial_Advisor_Loss as COL_CL_Financial_Advisor_Loss,
+AL.COL_CL_Misconduct_Count as COL_CL_Misconduct_Count,
+AL.COL_CL_Misconduct_Count_rptd as COL_CL_Misconduct_Count_rptd,
+AL.COL_CL_Misconduct_Loss as COL_CL_Misconduct_Loss,
+AL.COL_CL_Wills_Estate_Count as COL_CL_Wills_Estate_Count,
+AL.COL_CL_Wills_Estate_Count_rptd as COL_CL_Wills_Estate_Count_rptd,
+AL.COL_CL_Wills_Estate_Loss as COL_CL_Wills_Estate_Loss,
+AL.COL_CL_Corporate_Count as COL_CL_Corporate_Count,
+AL.COL_CL_Corporate_Count_rptd as COL_CL_Corporate_Count_rptd,
+AL.COL_CL_Corporate_Loss as COL_CL_Corporate_Loss,
+AL.COL_CL_Tax_Liability_Count as COL_CL_Tax_Liability_Count,
+AL.COL_CL_Tax_Liability_Count_rptd as COL_CL_Tax_Liability_Count_rptd,
+AL.COL_CL_Tax_Liability_Loss as COL_CL_Tax_Liability_Loss,
+AL.COL_CL_Violation_GAAP_Count as COL_CL_Violation_GAAP_Count,
+AL.COL_CL_Violation_GAAP_Count_rptd as COL_CL_Violation_GAAP_Count_rptd,
+AL.COL_CL_Violation_GAAP_Loss as COL_CL_Violation_GAAP_Loss,
+AL.COL_CL_Negligent_Training_Count as COL_CL_Negligent_Training_Count,
+AL.COL_CL_Negligent_Training_Count_rptd as COL_CL_Negligent_Training_Count_rptd,
+AL.COL_CL_Negligent_Training_Loss as COL_CL_Negligent_Training_Loss,
+AL.COL_CL_Electronic_Data_Damage_Count as COL_CL_Electronic_Data_Damage_Count,
+AL.COL_CL_Electronic_Data_Damage_Count_rptd as COL_CL_Electronic_Data_Damage_Count_rptd,
+AL.COL_CL_Electronic_Data_Damage_Loss as COL_CL_Electronic_Data_Damage_Loss,
+AL.COL_CL_All_Other_Count as COL_CL_All_Other_Count,
+AL.COL_CL_All_Other_Count_rptd as COL_CL_All_Other_Count_rptd,
+AL.COL_CL_All_Other_Loss as COL_CL_All_Other_Loss,
+AL.COL_GLBI_Malpractice_Count as COL_GLBI_Malpractice_Count,
+AL.COL_GLBI_Malpractice_Count_rptd as COL_GLBI_Malpractice_Count_rptd,
+AL.COL_GLBI_Malpractice_Loss as COL_GLBI_Malpractice_Loss,
+AL.COL_GLBI_Fraud_Breach_of_Contract_Count as COL_GLBI_Fraud_Breach_of_Contract_Count,
+AL.COL_GLBI_Fraud_Breach_of_Contract_Count_rptd as COL_GLBI_Fraud_Breach_of_Contract_Count_rptd,
+AL.COL_GLBI_Fraud_Breach_of_Contract_Loss as COL_GLBI_Fraud_Breach_of_Contract_Loss,
+AL.COL_GLBI_Injury_Count as COL_GLBI_Injury_Count,
+AL.COL_GLBI_Injury_Count_rptd as COL_GLBI_Injury_Count_rptd,
+AL.COL_GLBI_Injury_Loss as COL_GLBI_Injury_Loss,
+AL.COL_GLBI_Other_Count as COL_GLBI_Other_Count,
+AL.COL_GLBI_Other_Count_rptd as COL_GLBI_Other_Count_rptd,
+AL.COL_GLBI_Other_Loss as COL_GLBI_Other_Loss,
+AL.COL_GLBI_Sexual_Assault_Molest_Abuse_Count as COL_GLBI_Sexual_Assault_Molest_Abuse_Count,
+AL.COL_GLBI_Sexual_Assault_Molest_Abuse_Count_rptd as COL_GLBI_Sexual_Assault_Molest_Abuse_Count_rptd,
+AL.COL_GLBI_Sexual_Assault_Molest_Abuse_Loss as COL_GLBI_Sexual_Assault_Molest_Abuse_Loss,
+AL.COL_GLBI_PropertyDamage_Count as COL_GLBI_PropertyDamage_Count,
+AL.COL_GLBI_PropertyDamage_Count_rptd as COL_GLBI_PropertyDamage_Count_rptd,
+AL.COL_GLBI_PropertyDamage_Loss as COL_GLBI_PropertyDamage_Loss,
+AL.COL_GLBI_Theft_Count as COL_GLBI_Theft_Count,
+AL.COL_GLBI_Theft_Count_rptd as COL_GLBI_Theft_Count_rptd,
+AL.COL_GLBI_Theft_Loss as COL_GLBI_Theft_Loss,
+AL.COL_GLBI_SlanderDefamtion_count as COL_GLBI_SlanderDefamtion_Count,
+AL.COL_GLBI_SlanderDefamtion_count_rptd as COL_GLBI_SlanderDefamtion_Count_rptd,
+AL.COL_GLBI_SlanderDefamtion_loss as COL_GLBI_SlanderDefamtion_Loss,
+AL.COL_GLBI_Discrim_WrongfulTermination_Count as COL_GLBI_Discrim_WrongfulTermination_Count,
+AL.COL_GLBI_Discrim_WrongfulTermination_Count_rptd as COL_GLBI_Discrim_WrongfulTermination_Count_rptd,
+AL.COL_GLBI_Discrim_WrongfulTermination_Loss as COL_GLBI_Discrim_WrongfulTermination_Loss,
+AL.COL_Prop_Fire_Lightning_Explosion_Count as COL_Prop_Fire_Lightning_Explosion_Count,
+AL.COL_Prop_Fire_Lightning_Explosion_Count_rptd as COL_Prop_Fire_Lightning_Explosion_Count_rptd,
+AL.COL_Prop_Fire_Lightning_Explosion_Loss as COL_Prop_Fire_Lightning_Explosion_Loss,
+AL.COL_Prop_Theft_Van_Count as COL_Prop_Theft_Van_Count,
+AL.COL_Prop_Theft_Van_Count_rptd as COL_Prop_Theft_Van_Count_rptd,
+AL.COL_Prop_Theft_Van_Loss as COL_Prop_Theft_Van_Loss,
+AL.COL_Prop_Water_Sprinkler_Count as COL_Prop_Water_Sprinkler_Count,
+AL.COL_Prop_Water_Sprinkler_Count_rptd as COL_Prop_Water_Sprinkler_Count_rptd,
+AL.COL_Prop_Water_Sprinkler_Loss as COL_Prop_Water_Sprinkler_Loss,
+AL.COL_Prop_Water_Other_Count as COL_Prop_Water_Other_Count,
+AL.COL_Prop_Water_Other_Count_rptd as COL_Prop_Water_Other_Count_rptd,
+AL.COL_Prop_Water_Other_Loss as COL_Prop_Water_Other_Loss,
+AL.COL_Prop_Wind_Hail_Count as COL_Prop_Wind_Hail_Count,
+AL.COL_Prop_Wind_Hail_Count_rptd as COL_Prop_Wind_Hail_Count_rptd,
+AL.COL_Prop_Wind_Hail_Loss as COL_Prop_Wind_Hail_Loss,
+AL.COL_Prop_Other_Count as COL_Prop_Other_Count,
+AL.COL_Prop_Other_Count_rptd as COL_Prop_Other_Count_rptd,
+AL.COL_Prop_Other_Loss as COL_Prop_Other_Loss,
+AL.COL_AUTO_LIAB_AllOther_Count as COL_AUTO_LIAB_AllOther_Count,
+AL.COL_AUTO_LIAB_AllOther_Count_rptd as COL_AUTO_LIAB_AllOther_Count_rptd,
+AL.COL_AUTO_LIAB_AllOther_Loss as COL_AUTO_LIAB_AllOther_Loss,
+AL.COL_AUTO_LIAB_PropDam_Count as COL_AUTO_LIAB_PropDam_Count,
+AL.COL_AUTO_LIAB_PropDam_Count_rptd as COL_AUTO_LIAB_PropDam_Count_rptd,
+AL.COL_AUTO_LIAB_PropDam_Loss as COL_AUTO_LIAB_PropDam_Loss,
+AL.COL_AUTO_PHYS_Coll_Count as COL_AUTO_PHYS_Coll_Count,
+AL.COL_AUTO_PHYS_Coll_Count_rptd as COL_AUTO_PHYS_Coll_Count_rptd,
+AL.COL_AUTO_PHYS_Coll_Loss as COL_AUTO_PHYS_Coll_Loss,
+AL.COL_AUTO_PHYS_Glass_Count as COL_AUTO_PHYS_Glass_Count,
+AL.COL_AUTO_PHYS_Glass_Count_rptd as COL_AUTO_PHYS_Glass_Count_rptd,
+AL.COL_AUTO_PHYS_Glass_Loss as COL_AUTO_PHYS_Glass_Loss,
+AL.COL_AUTO_PHYS_Other_Count as COL_AUTO_PHYS_Other_Count,
+AL.COL_AUTO_PHYS_Other_Count_rptd as COL_AUTO_PHYS_Other_Count_rptd,
+AL.COL_AUTO_PHYS_Other_Loss as COL_AUTO_PHYS_Other_Loss,
+AL.COL_AUTO_PHYS_Theft_Count as COL_AUTO_PHYS_Theft_Count,
+AL.COL_AUTO_PHYS_Theft_Count_rptd as COL_AUTO_PHYS_Theft_Count_rptd,
+AL.COL_AUTO_PHYS_Theft_Loss as COL_AUTO_PHYS_Theft_Loss,
+AL.Case_Loss as Case_Loss,
+AL.Case_ALAE as Case_ALAE,
+AL.Paid_Loss as Paid_Loss,
+AL.Paid_ALAE as Paid_ALAE,
+
+AL.Sal_Subro as Sal_Subro,
+ AL.Incurred_Loss_ALAE_with_SS_CatOnly as Incurred_Loss_ALAE_with_SS_CatOnly,
+AL.Incurred_Loss_ALAE_without_SS_NonCat as Incurred_Loss_ALAE_without_SS_NonCat,
+AL.Incurred_Loss_ALAE_without_SS_CatOnly as Incurred_Loss_ALAE_without_SS_CatOnly,
+AL.Incurred_Loss_ALAE_with_SS_NonCat as Incurred_Loss_ALAE_with_SS_NonCat,
+AL.Incurred_Loss_ALAE_without_SS as Incurred_Loss_ALAE_without_SS,
+AL.Incurred_Loss_ALAE_with_SS as Incurred_Loss_ALAE_with_SS,
+AL.Capped_Incurred_Loss_ALAE_with_SS as Capped_Incurred_Loss_ALAE_with_SS,
+AL.Capped_Incurred_Loss_ALAE_with_SS_wo_cat as Capped_Incurred_Loss_ALAE_with_SS_wo_cat,
+AL.Ult_LDF_Incurred_Loss_ALAE_with_SS as Ult_LDF_Incurred_Loss_ALAE_with_SS,
+AL.Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly as Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly,
+AL.Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat as Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat,
+AL.Ult_LDF_Incurred_Loss_ALAE_without_SS as Ult_LDF_Incurred_Loss_ALAE_without_SS,
+AL.Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly as Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly,
+AL.Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat as Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat,
+AL.Ult_LDF_Capped_Inc_Loss_ALAE_with_SS as Ult_LDF_Capped_Inc_Loss_ALAE_with_SS,
+AL.Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat as Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat,
+AL.Reported_Claims as Reported_Claims,
+AL.Open_Claims as Open_Claims,
+AL.Closed_With_Pay_Claims as Closed_With_Pay_Claims,
+AL.Closed_Without_Pay_Claims as Closed_Without_Pay_Claims,
+AL.Incurred_Claims as Incurred_Claims,
+null as Experience_Product_Group,
+null as Case_Loss_PremSt ,
+null as Case_ALAE_PremSt ,
+null as Paid_Loss_PremSt ,
+null as Paid_ALAE_PremSt ,
+null as Sal_Subro_PremSt ,
+null as Incurred_Loss_ALAE_with_SS_CatOnly_PremSt ,
+null as Incurred_Loss_ALAE_without_SS_NonCat_PremSt ,
+null as Incurred_Loss_ALAE_without_SS_CatOnly_PremSt ,
+null as Incurred_Loss_ALAE_with_SS_NonCat_PremSt ,
+null as Incurred_Loss_ALAE_without_SS_PremSt ,
+null as Incurred_Loss_ALAE_with_SS_PremSt ,
+null as Capped_Incurred_Loss_ALAE_with_SS_PremSt ,
+null as Capped_Incurred_Loss_ALAE_with_SS_wo_cat_PremSt ,
+null as Ult_LDF_Incurred_Loss_ALAE_with_SS_PremSt ,
+null as Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly_PremSt ,
+null as Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat_PremSt ,
+null as Ult_LDF_Incurred_Loss_ALAE_without_SS_PremSt ,
+null as Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly_PremSt ,
+null as Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat_PremSt ,
+null as Ult_LDF_Capped_Inc_Loss_ALAE_with_SS_PremSt ,
+null as Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat_PremSt ,
+null as Reported_Claims_PremSt ,
+null as Open_Claims_PremSt ,
+null as Closed_With_Pay_Claims_PremSt ,
+null as Closed_Without_Pay_Claims_PremSt ,
+null as Incurred_Claims_PremSt,
+null as Commission_pct,
+null as Commission_dollars,
+null as Commission_Premiums,
+null as FA_Number_of_Buildings,
+null as FA_Number_of_Locations,
+null as TIV,
+null as Term_Factor,
+null as Written_Premium_Policy_FireAllied,
+null as Earned_Buildings,
+null as Earned_Locations,
+null as Earned_TIV,
+null as Earned_Buildings_Total,
+null as Earned_Locations_Total,
+null as Earned_TIV_Total
+
+
+from (
+select AL1.*, p_policynumber = PS.policynumber
+from Act_Detailed_Experience.dbo.ALL_POLICIES_12_Detail_Information_2_work AL1
+left join Act_Detailed_Experience.dbo.ALL_POLICIES_12_premium_summary_work PS
+on PS.policynumber = AL1.policynumber
+	and PS.experienceproduct = AL1.ExperienceProduct
+	and PS.statecode = AL1.Accident_State_for_join
+	and PS.Coverage_Group = AL1.Coverage_group 
+	and PS.Coverage_Form = AL1.coverage_form
+	and PS.acctngyear = AL1.Accident_Year
+	and PS.Fiscal_AY_Month_Ending = AL1.Fiscal_AY_Month_Ending
+	and PS.Fiscal_AY_Year = AL1.Fiscal_AY_Year
+) as AL
+left outer join Act_Definitions.dbo.Coverage_Reporting_Groups crg
+on AL.Coverage_Group=crg.Coverage_Group
+where AL.p_policynumber is null
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N''[dbo].[ALL_POLICIES_12_premium_summary_temp]'') AND type in (N''U''))
+drop table Act_Detailed_Experience.dbo.ALL_POLICIES_12_premium_summary_temp
+
+select 	ps.[accountnumber],
+	ps.[policynumber],
+	ps.[policyeffectivedate],
+	ps.[statecode],
+	ps.[Coverage_Group],
+	ps.[Coverage_Reporting_group],
+	ps.[Coverage_Form],
+	ps.[productcode],
+	ps.[experienceproduct],
+	ps.[Fiscal_AY_Month_Ending],
+	ps.[Fiscal_AY_Year],
+	ps.[acctngyear],
+	ps.[Last_Reporting_Year],
+	ps.[Last_Reporting_Month],
+	ps.[currentwrittenpremium],
+	ps.[currentearnedpremium],
+	ps.[Policy_count_All_Cov_Combined_WP],
+	ps.[Policy_count_Reporting_Coverage_WP],
+	ps.[Policy_count_Coverage_Group_WP],
+	ps.[Policy_count_All_Cov_Combined],
+	ps.[Policy_count_Reporting_Coverage],
+	ps.[Policy_count_Coverage_Group],
+	ps.[Policy_count_All_Cov_Combined_Total],
+	ps.[Policy_count_Reporting_Coverage_Total],
+	ps.[Policy_count_Coverage_Group_Total],	
+isnull(AL.Loss_Evaluation_Month,PS.Loss_Evaluation_Month) as Loss_Evaluation_Month,
+isnull(AL.Loss_Evaluation_Year,PS.Loss_Evaluation_Year) as Loss_Evaluation_Year,
+isnull(AL.Loss_ALAE_Cap,PS.Loss_ALAE_Cap) as Loss_ALAE_Cap,
+isnull(AL.COL_Breach_of_Contract_Count,PS.COL_Breach_of_Contract_Count) as COL_Breach_of_Contract_Count,
+isnull(AL.COL_Breach_of_Contract_Count_rptd,PS.COL_Breach_of_Contract_Count_rptd) as COL_Breach_of_Contract_Count_rptd,
+isnull(AL.COL_Breach_of_Contract_Loss,PS.COL_Breach_of_Contract_Loss) as COL_Breach_of_Contract_Loss,
+isnull(AL.COL_Discrimination_Count,PS.COL_Discrimination_Count) as COL_Discrimination_Count,
+isnull(AL.COL_Discrimination_Count_rptd,PS.COL_Discrimination_Count_rptd) as COL_Discrimination_Count_rptd,
+isnull(AL.COL_Discrimination_Loss,PS.COL_Discrimination_Loss) as COL_Discrimination_Loss,
+isnull(AL.COL_Wrongful_Termination_Count,PS.COL_Wrongful_Termination_Count) as COL_Wrongful_Termination_Count,
+isnull(AL.COL_Wrongful_Termination_Count_rptd,PS.COL_Wrongful_Termination_Count_rptd) as COL_Wrongful_Termination_Count_rptd,
+isnull(AL.COL_Wrongful_Termination_Loss,PS.COL_Wrongful_Termination_Loss) as COL_Wrongful_Termination_Loss,
+isnull(AL.COL_Harrassment_Count,PS.COL_Harrassment_Count) as COL_Harrassment_Count,
+isnull(AL.COL_Harrassment_Count_rptd,PS.COL_Harrassment_Count_rptd) as COL_Harrassment_Count_rptd,
+isnull(AL.COL_Harrassment_Loss,PS.COL_Harrassment_Loss) as COL_Harrassment_Loss,
+isnull(AL.COL_DO_Other_Count,PS.COL_DO_Other_Count) as COL_DO_Other_Count,
+isnull(AL.COL_DO_Other_Count_rptd,PS.COL_DO_Other_Count_rptd) as COL_DO_Other_Count_rptd,
+isnull(AL.COL_DO_Other_Loss,PS.COL_DO_Other_Loss) as COL_DO_Other_Loss,
+isnull(AL.COL_EPL_Other_Count,PS.COL_EPL_Other_Count) as COL_EPL_Other_Count,
+isnull(AL.COL_EPL_Other_Count_rptd,PS.COL_EPL_Other_Count_rptd) as COL_EPL_Other_Count_rptd,
+isnull(AL.COL_EPL_Other_Loss,PS.COL_EPL_Other_Loss) as COL_EPL_Other_Loss,
+isnull(AL.COL_Fiduciary_Other_Count,PS.COL_Fiduciary_Other_Count) as COL_Fiduciary_Other_Count,
+isnull(AL.COL_Fiduciary_Other_Count_rptd,PS.COL_Fiduciary_Other_Count_rptd) as COL_Fiduciary_Other_Count_rptd,
+isnull(AL.COL_Fiduciary_Other_Loss,PS.COL_Fiduciary_Other_Loss) as COL_Fiduciary_Other_Loss,
+isnull(AL.COL_Worplace_Violence_Other_Count,PS.COL_Worplace_Violence_Other_Count) as COL_Worplace_Violence_Other_Count,
+isnull(AL.COL_Worplace_Violence_Other_Count_rptd,PS.COL_Worplace_Violence_Other_Count_rptd) as COL_Worplace_Violence_Other_Count_rptd,
+isnull(AL.COL_Worplace_Violence_Other_Loss,PS.COL_Worplace_Violence_Other_Loss) as COL_Worplace_Violence_Other_Loss,
+isnull(AL.COL_Internet_Other_Count,PS.COL_Internet_Other_Count) as COL_Internet_Other_Count,
+isnull(AL.COL_Internet_Other_Count_rptd,PS.COL_Internet_Other_Count_rptd) as COL_Internet_Other_Count_rptd,
+isnull(AL.COL_Internet_Other_Loss,PS.COL_Internet_Other_Loss) as COL_Internet_Other_Loss,
+isnull(AL.COL_SLD_All_Other_Count,PS.COL_SLD_All_Other_Count) as COL_SLD_All_Other_Count,
+isnull(AL.COL_SLD_All_Other_Count_rptd,PS.COL_SLD_All_Other_Count_rptd) as COL_SLD_All_Other_Count_rptd,
+isnull(AL.COL_SLD_All_Other_Loss,PS.COL_SLD_All_Other_Loss) as COL_SLD_All_Other_Loss,
+isnull(AL.COL_AE_Breach_of_Contract_Count,PS.COL_AE_Breach_of_Contract_Count) as COL_AE_Breach_of_Contract_Count,
+isnull(AL.COL_AE_Breach_of_Contract_Count_rptd,PS.COL_AE_Breach_of_Contract_Count_rptd) as COL_AE_Breach_of_Contract_Count_rptd,
+isnull(AL.COL_AE_Breach_of_Contract_Loss,PS.COL_AE_Breach_of_Contract_Loss) as COL_AE_Breach_of_Contract_Loss,
+isnull(AL.COL_AE_Breach_of_Fiduciary_Liability_Count,PS.COL_AE_Breach_of_Fiduciary_Liability_Count) as COL_AE_Breach_of_Fiduciary_Liability_Count,
+isnull(AL.COL_AE_Breach_of_Fiduciary_Liability_Count_rptd,PS.COL_AE_Breach_of_Fiduciary_Liability_Count_rptd) as COL_AE_Breach_of_Fiduciary_Liability_Count_rptd,
+isnull(AL.COL_AE_Breach_of_Fiduciary_Liability_Loss,PS.COL_AE_Breach_of_Fiduciary_Liability_Loss) as COL_AE_Breach_of_Fiduciary_Liability_Loss,
+isnull(AL.COL_AE_Financial_Advisor_Count,PS.COL_AE_Financial_Advisor_Count) as COL_AE_Financial_Advisor_Count,
+isnull(AL.COL_AE_Financial_Advisor_Count_rptd,PS.COL_AE_Financial_Advisor_Count_rptd) as COL_AE_Financial_Advisor_Count_rptd,
+isnull(AL.COL_AE_Financial_Advisor_Loss,PS.COL_AE_Financial_Advisor_Loss) as COL_AE_Financial_Advisor_Loss,
+isnull(AL.COL_AE_Misconduct_Count,PS.COL_AE_Misconduct_Count) as COL_AE_Misconduct_Count,
+isnull(AL.COL_AE_Misconduct_Count_rptd,PS.COL_AE_Misconduct_Count_rptd) as COL_AE_Misconduct_Count_rptd,
+isnull(AL.COL_AE_Misconduct_Loss,PS.COL_AE_Misconduct_Loss) as COL_AE_Misconduct_Loss,
+isnull(AL.COL_AE_Wills_Estate_Count,PS.COL_AE_Wills_Estate_Count) as COL_AE_Wills_Estate_Count,
+isnull(AL.COL_AE_Wills_Estate_Count_rptd,PS.COL_AE_Wills_Estate_Count_rptd) as COL_AE_Wills_Estate_Count_rptd,
+isnull(AL.COL_AE_Wills_Estate_Loss,PS.COL_AE_Wills_Estate_Loss) as COL_AE_Wills_Estate_Loss,
+isnull(AL.COL_AE_Corporate_Count,PS.COL_AE_Corporate_Count) as COL_AE_Corporate_Count,
+isnull(AL.COL_AE_Corporate_Count_rptd,PS.COL_AE_Corporate_Count_rptd) as COL_AE_Corporate_Count_rptd,
+isnull(AL.COL_AE_Corporate_Loss,PS.COL_AE_Corporate_Loss) as COL_AE_Corporate_Loss,
+isnull(AL.COL_AE_Tax_Liability_Count,PS.COL_AE_Tax_Liability_Count) as COL_AE_Tax_Liability_Count,
+isnull(AL.COL_AE_Tax_Liability_Count_rptd,PS.COL_AE_Tax_Liability_Count_rptd) as COL_AE_Tax_Liability_Count_rptd,
+isnull(AL.COL_AE_Tax_Liability_Loss,PS.COL_AE_Tax_Liability_Loss) as COL_AE_Tax_Liability_Loss,
+isnull(AL.COL_AE_Violation_GAAP_Count,PS.COL_AE_Violation_GAAP_Count) as COL_AE_Violation_GAAP_Count,
+isnull(AL.COL_AE_Violation_GAAP_Count_rptd,PS.COL_AE_Violation_GAAP_Count_rptd) as COL_AE_Violation_GAAP_Count_rptd,
+isnull(AL.COL_AE_Violation_GAAP_Loss,PS.COL_AE_Violation_GAAP_Loss) as COL_AE_Violation_GAAP_Loss,
+isnull(AL.COL_AE_All_Other_Count,PS.COL_AE_All_Other_Count) as COL_AE_All_Other_Count,
+isnull(AL.COL_AE_All_Other_Count_rptd,PS.COL_AE_All_Other_Count_rptd) as COL_AE_All_Other_Count_rptd,
+isnull(AL.COL_AE_All_Other_Loss,PS.COL_AE_All_Other_Loss) as COL_AE_All_Other_Loss,
+isnull(AL.COL_CL_Breach_of_Contract_Count,PS.COL_CL_Breach_of_Contract_Count) as COL_CL_Breach_of_Contract_Count,
+isnull(AL.COL_CL_Breach_of_Contract_Count_rptd,PS.COL_CL_Breach_of_Contract_Count_rptd) as COL_CL_Breach_of_Contract_Count_rptd,
+isnull(AL.COL_CL_Breach_of_Contract_Loss,PS.COL_CL_Breach_of_Contract_Loss) as COL_CL_Breach_of_Contract_Loss,
+isnull(AL.COL_CL_Breach_of_Fiduciary_Liability_Count,PS.COL_CL_Breach_of_Fiduciary_Liability_Count) as COL_CL_Breach_of_Fiduciary_Liability_Count,
+isnull(AL.COL_CL_Breach_of_Fiduciary_Liability_Count_rptd,PS.COL_CL_Breach_of_Fiduciary_Liability_Count_rptd) as COL_CL_Breach_of_Fiduciary_Liability_Count_rptd,
+isnull(AL.COL_CL_Breach_of_Fiduciary_Liability_Loss,PS.COL_CL_Breach_of_Fiduciary_Liability_Loss) as COL_CL_Breach_of_Fiduciary_Liability_Loss,
+isnull(AL.COL_CL_Financial_Advisor_Count,PS.COL_CL_Financial_Advisor_Count) as COL_CL_Financial_Advisor_Count,
+isnull(AL.COL_CL_Financial_Advisor_Count_rptd,PS.COL_CL_Financial_Advisor_Count_rptd) as COL_CL_Financial_Advisor_Count_rptd,
+isnull(AL.COL_CL_Financial_Advisor_Loss,PS.COL_CL_Financial_Advisor_Loss) as COL_CL_Financial_Advisor_Loss,
+isnull(AL.COL_CL_Misconduct_Count,PS.COL_CL_Misconduct_Count) as COL_CL_Misconduct_Count,
+isnull(AL.COL_CL_Misconduct_Count_rptd,PS.COL_CL_Misconduct_Count_rptd) as COL_CL_Misconduct_Count_rptd,
+isnull(AL.COL_CL_Misconduct_Loss,PS.COL_CL_Misconduct_Loss) as COL_CL_Misconduct_Loss,
+isnull(AL.COL_CL_Wills_Estate_Count,PS.COL_CL_Wills_Estate_Count) as COL_CL_Wills_Estate_Count,
+isnull(AL.COL_CL_Wills_Estate_Count_rptd,PS.COL_CL_Wills_Estate_Count_rptd) as COL_CL_Wills_Estate_Count_rptd,
+isnull(AL.COL_CL_Wills_Estate_Loss,PS.COL_CL_Wills_Estate_Loss) as COL_CL_Wills_Estate_Loss,
+isnull(AL.COL_CL_Corporate_Count,PS.COL_CL_Corporate_Count) as COL_CL_Corporate_Count,
+isnull(AL.COL_CL_Corporate_Count_rptd,PS.COL_CL_Corporate_Count_rptd) as COL_CL_Corporate_Count_rptd,
+isnull(AL.COL_CL_Corporate_Loss,PS.COL_CL_Corporate_Loss) as COL_CL_Corporate_Loss,
+isnull(AL.COL_CL_Tax_Liability_Count,PS.COL_CL_Tax_Liability_Count) as COL_CL_Tax_Liability_Count,
+isnull(AL.COL_CL_Tax_Liability_Count_rptd,PS.COL_CL_Tax_Liability_Count_rptd) as COL_CL_Tax_Liability_Count_rptd,
+isnull(AL.COL_CL_Tax_Liability_Loss,PS.COL_CL_Tax_Liability_Loss) as COL_CL_Tax_Liability_Loss,
+isnull(AL.COL_CL_Violation_GAAP_Count,PS.COL_CL_Violation_GAAP_Count) as COL_CL_Violation_GAAP_Count,
+isnull(AL.COL_CL_Violation_GAAP_Count_rptd,PS.COL_CL_Violation_GAAP_Count_rptd) as COL_CL_Violation_GAAP_Count_rptd,
+isnull(AL.COL_CL_Violation_GAAP_Loss,PS.COL_CL_Violation_GAAP_Loss) as COL_CL_Violation_GAAP_Loss,
+isnull(AL.COL_CL_Negligent_Training_Count,PS.COL_CL_Negligent_Training_Count) as COL_CL_Negligent_Training_Count,
+isnull(AL.COL_CL_Negligent_Training_Count_rptd,PS.COL_CL_Negligent_Training_Count_rptd) as COL_CL_Negligent_Training_Count_rptd,
+isnull(AL.COL_CL_Negligent_Training_Loss,PS.COL_CL_Negligent_Training_Loss) as COL_CL_Negligent_Training_Loss,
+isnull(AL.COL_CL_Electronic_Data_Damage_Count,PS.COL_CL_Electronic_Data_Damage_Count) as COL_CL_Electronic_Data_Damage_Count,
+isnull(AL.COL_CL_Electronic_Data_Damage_Count_rptd,PS.COL_CL_Electronic_Data_Damage_Count_rptd) as COL_CL_Electronic_Data_Damage_Count_rptd,
+isnull(AL.COL_CL_Electronic_Data_Damage_Loss,PS.COL_CL_Electronic_Data_Damage_Loss) as COL_CL_Electronic_Data_Damage_Loss,
+isnull(AL.COL_CL_All_Other_Count,PS.COL_CL_All_Other_Count) as COL_CL_All_Other_Count,
+isnull(AL.COL_CL_All_Other_Count_rptd,PS.COL_CL_All_Other_Count_rptd) as COL_CL_All_Other_Count_rptd,
+isnull(AL.COL_CL_All_Other_Loss,PS.COL_CL_All_Other_Loss) as COL_CL_All_Other_Loss,
+isnull(AL.COL_GLBI_Malpractice_Count,PS.COL_GLBI_Malpractice_Count) as COL_GLBI_Malpractice_Count,
+isnull(AL.COL_GLBI_Malpractice_Count_rptd,PS.COL_GLBI_Malpractice_Count_rptd) as COL_GLBI_Malpractice_Count_rptd,
+isnull(AL.COL_GLBI_Malpractice_Loss,PS.COL_GLBI_Malpractice_Loss) as COL_GLBI_Malpractice_Loss,
+isnull(AL.COL_GLBI_Fraud_Breach_of_Contract_Count,PS.COL_GLBI_Fraud_Breach_of_Contract_Count) as COL_GLBI_Fraud_Breach_of_Contract_Count,
+isnull(AL.COL_GLBI_Fraud_Breach_of_Contract_Count_rptd,PS.COL_GLBI_Fraud_Breach_of_Contract_Count_rptd) as COL_GLBI_Fraud_Breach_of_Contract_Count_rptd,
+isnull(AL.COL_GLBI_Fraud_Breach_of_Contract_Loss,PS.COL_GLBI_Fraud_Breach_of_Contract_Loss) as COL_GLBI_Fraud_Breach_of_Contract_Loss,
+isnull(AL.COL_GLBI_Injury_Count,PS.COL_GLBI_Injury_Count) as COL_GLBI_Injury_Count,
+isnull(AL.COL_GLBI_Injury_Count_rptd,PS.COL_GLBI_Injury_Count_rptd) as COL_GLBI_Injury_Count_rptd,
+isnull(AL.COL_GLBI_Injury_Loss,PS.COL_GLBI_Injury_Loss) as COL_GLBI_Injury_Loss,
+isnull(AL.COL_GLBI_Other_Count,PS.COL_GLBI_Other_Count) as COL_GLBI_Other_Count,
+isnull(AL.COL_GLBI_Other_Count_rptd,PS.COL_GLBI_Other_Count_rptd) as COL_GLBI_Other_Count_rptd,
+isnull(AL.COL_GLBI_Other_Loss,PS.COL_GLBI_Other_Loss) as COL_GLBI_Other_Loss,
+isnull(AL.COL_GLBI_Sexual_Assault_Molest_Abuse_Count,PS.COL_GLBI_Sexual_Assault_Molest_Abuse_Count) as COL_GLBI_Sexual_Assault_Molest_Abuse_Count,
+isnull(AL.COL_GLBI_Sexual_Assault_Molest_Abuse_Count_rptd,PS.COL_GLBI_Sexual_Assault_Molest_Abuse_Count_rptd) as COL_GLBI_Sexual_Assault_Molest_Abuse_Count_rptd,
+isnull(AL.COL_GLBI_Sexual_Assault_Molest_Abuse_Loss,PS.COL_GLBI_Sexual_Assault_Molest_Abuse_Loss) as COL_GLBI_Sexual_Assault_Molest_Abuse_Loss,
+isnull(AL.COL_GLBI_PropertyDamage_Count,PS.COL_GLBI_PropertyDamage_Count) as COL_GLBI_PropertyDamage_Count,
+isnull(AL.COL_GLBI_PropertyDamage_Count_rptd,PS.COL_GLBI_PropertyDamage_Count_rptd) as COL_GLBI_PropertyDamage_Count_rptd,
+isnull(AL.COL_GLBI_PropertyDamage_Loss,PS.COL_GLBI_PropertyDamage_Loss) as COL_GLBI_PropertyDamage_Loss,
+isnull(AL.COL_GLBI_Theft_Count,PS.COL_GLBI_Theft_Count) as COL_GLBI_Theft_Count,
+isnull(AL.COL_GLBI_Theft_Count_rptd,PS.COL_GLBI_Theft_Count_rptd) as COL_GLBI_Theft_Count_rptd,
+isnull(AL.COL_GLBI_Theft_Loss,PS.COL_GLBI_Theft_Loss) as COL_GLBI_Theft_Loss,
+isnull(AL.COL_GLBI_SlanderDefamtion_count,PS.COL_GLBI_SlanderDefamtion_count) as COL_GLBI_SlanderDefamtion_Count,
+isnull(AL.COL_GLBI_SlanderDefamtion_count_rptd,PS.COL_GLBI_SlanderDefamtion_count_rptd) as COL_GLBI_SlanderDefamtion_Count_rptd,
+isnull(AL.COL_GLBI_SlanderDefamtion_loss,PS.COL_GLBI_SlanderDefamtion_loss) as COL_GLBI_SlanderDefamtion_Loss,
+isnull(AL.COL_GLBI_Discrim_WrongfulTermination_Count,PS.COL_GLBI_Discrim_WrongfulTermination_Count) as COL_GLBI_Discrim_WrongfulTermination_Count,
+isnull(AL.COL_GLBI_Discrim_WrongfulTermination_Count_rptd,PS.COL_GLBI_Discrim_WrongfulTermination_Count_rptd) as COL_GLBI_Discrim_WrongfulTermination_Count_rptd,
+isnull(AL.COL_GLBI_Discrim_WrongfulTermination_Loss,PS.COL_GLBI_Discrim_WrongfulTermination_Loss) as COL_GLBI_Discrim_WrongfulTermination_Loss,
+isnull(AL.COL_Prop_Fire_Lightning_Explosion_Count,PS.COL_Prop_Fire_Lightning_Explosion_Count) as COL_Prop_Fire_Lightning_Explosion_Count,
+isnull(AL.COL_Prop_Fire_Lightning_Explosion_Count_rptd,PS.COL_Prop_Fire_Lightning_Explosion_Count_rptd) as COL_Prop_Fire_Lightning_Explosion_Count_rptd,
+isnull(AL.COL_Prop_Fire_Lightning_Explosion_Loss,PS.COL_Prop_Fire_Lightning_Explosion_Loss) as COL_Prop_Fire_Lightning_Explosion_Loss,
+isnull(AL.COL_Prop_Theft_Van_Count,PS.COL_Prop_Theft_Van_Count) as COL_Prop_Theft_Van_Count,
+isnull(AL.COL_Prop_Theft_Van_Count_rptd,PS.COL_Prop_Theft_Van_Count_rptd) as COL_Prop_Theft_Van_Count_rptd,
+isnull(AL.COL_Prop_Theft_Van_Loss,PS.COL_Prop_Theft_Van_Loss) as COL_Prop_Theft_Van_Loss,
+isnull(AL.COL_Prop_Water_Sprinkler_Count,PS.COL_Prop_Water_Sprinkler_Count) as COL_Prop_Water_Sprinkler_Count,
+isnull(AL.COL_Prop_Water_Sprinkler_Count_rptd,PS.COL_Prop_Water_Sprinkler_Count_rptd) as COL_Prop_Water_Sprinkler_Count_rptd,
+isnull(AL.COL_Prop_Water_Sprinkler_Loss,PS.COL_Prop_Water_Sprinkler_Loss) as COL_Prop_Water_Sprinkler_Loss,
+isnull(AL.COL_Prop_Water_Other_Count,PS.COL_Prop_Water_Other_Count) as COL_Prop_Water_Other_Count,
+isnull(AL.COL_Prop_Water_Other_Count_rptd,PS.COL_Prop_Water_Other_Count_rptd) as COL_Prop_Water_Other_Count_rptd,
+isnull(AL.COL_Prop_Water_Other_Loss,PS.COL_Prop_Water_Other_Loss) as COL_Prop_Water_Other_Loss,
+isnull(AL.COL_Prop_Wind_Hail_Count,PS.COL_Prop_Wind_Hail_Count) as COL_Prop_Wind_Hail_Count,
+isnull(AL.COL_Prop_Wind_Hail_Count_rptd,PS.COL_Prop_Wind_Hail_Count_rptd) as COL_Prop_Wind_Hail_Count_rptd,
+isnull(AL.COL_Prop_Wind_Hail_Loss,PS.COL_Prop_Wind_Hail_Loss) as COL_Prop_Wind_Hail_Loss,
+isnull(AL.COL_Prop_Other_Count,PS.COL_Prop_Other_Count) as COL_Prop_Other_Count,
+isnull(AL.COL_Prop_Other_Count_rptd,PS.COL_Prop_Other_Count_rptd) as COL_Prop_Other_Count_rptd,
+isnull(AL.COL_Prop_Other_Loss,PS.COL_Prop_Other_Loss) as COL_Prop_Other_Loss,
+isnull(AL.COL_AUTO_LIAB_AllOther_Count,PS.COL_AUTO_LIAB_AllOther_Count) as COL_AUTO_LIAB_AllOther_Count,
+isnull(AL.COL_AUTO_LIAB_AllOther_Count_rptd,PS.COL_AUTO_LIAB_AllOther_Count_rptd) as COL_AUTO_LIAB_AllOther_Count_rptd,
+isnull(AL.COL_AUTO_LIAB_AllOther_Loss,PS.COL_AUTO_LIAB_AllOther_Loss) as COL_AUTO_LIAB_AllOther_Loss,
+isnull(AL.COL_AUTO_LIAB_PropDam_Count,PS.COL_AUTO_LIAB_PropDam_Count) as COL_AUTO_LIAB_PropDam_Count,
+isnull(AL.COL_AUTO_LIAB_PropDam_Count_rptd,PS.COL_AUTO_LIAB_PropDam_Count_rptd) as COL_AUTO_LIAB_PropDam_Count_rptd,
+isnull(AL.COL_AUTO_LIAB_PropDam_Loss,PS.COL_AUTO_LIAB_PropDam_Loss) as COL_AUTO_LIAB_PropDam_Loss,
+isnull(AL.COL_AUTO_PHYS_Coll_Count,PS.COL_AUTO_PHYS_Coll_Count) as COL_AUTO_PHYS_Coll_Count,
+isnull(AL.COL_AUTO_PHYS_Coll_Count_rptd,PS.COL_AUTO_PHYS_Coll_Count_rptd) as COL_AUTO_PHYS_Coll_Count_rptd,
+isnull(AL.COL_AUTO_PHYS_Coll_Loss,PS.COL_AUTO_PHYS_Coll_Loss) as COL_AUTO_PHYS_Coll_Loss,
+isnull(AL.COL_AUTO_PHYS_Glass_Count,PS.COL_AUTO_PHYS_Glass_Count) as COL_AUTO_PHYS_Glass_Count,
+isnull(AL.COL_AUTO_PHYS_Glass_Count_rptd,PS.COL_AUTO_PHYS_Glass_Count_rptd) as COL_AUTO_PHYS_Glass_Count_rptd,
+isnull(AL.COL_AUTO_PHYS_Glass_Loss,PS.COL_AUTO_PHYS_Glass_Loss) as COL_AUTO_PHYS_Glass_Loss,
+isnull(AL.COL_AUTO_PHYS_Other_Count,PS.COL_AUTO_PHYS_Other_Count) as COL_AUTO_PHYS_Other_Count,
+isnull(AL.COL_AUTO_PHYS_Other_Count_rptd,PS.COL_AUTO_PHYS_Other_Count_rptd) as COL_AUTO_PHYS_Other_Count_rptd,
+isnull(AL.COL_AUTO_PHYS_Other_Loss,PS.COL_AUTO_PHYS_Other_Loss) as COL_AUTO_PHYS_Other_Loss,
+isnull(AL.COL_AUTO_PHYS_Theft_Count,PS.COL_AUTO_PHYS_Theft_Count) as COL_AUTO_PHYS_Theft_Count,
+isnull(AL.COL_AUTO_PHYS_Theft_Count_rptd,PS.COL_AUTO_PHYS_Theft_Count_rptd) as COL_AUTO_PHYS_Theft_Count_rptd,
+isnull(AL.COL_AUTO_PHYS_Theft_Loss,PS.COL_AUTO_PHYS_Theft_Loss) as COL_AUTO_PHYS_Theft_Loss,
+isnull(AL.Case_Loss,PS.Case_Loss) as Case_Loss,
+isnull(AL.Case_ALAE,PS.Case_ALAE) as Case_ALAE,
+isnull(AL.Paid_Loss,PS.Paid_Loss) as Paid_Loss,
+isnull(AL.Paid_ALAE,PS.Paid_ALAE) as Paid_ALAE,
+isnull(AL.Sal_Subro,PS.Sal_Subro) as Sal_Subro,
+isnull(AL.Incurred_Loss_ALAE_with_SS_CatOnly,PS.Incurred_Loss_ALAE_with_SS_CatOnly) as Incurred_Loss_ALAE_with_SS_CatOnly,
+isnull(AL.Incurred_Loss_ALAE_without_SS_NonCat,PS.Incurred_Loss_ALAE_without_SS_NonCat) as Incurred_Loss_ALAE_without_SS_NonCat,
+isnull(AL.Incurred_Loss_ALAE_without_SS_CatOnly,PS.Incurred_Loss_ALAE_without_SS_CatOnly) as Incurred_Loss_ALAE_without_SS_CatOnly,
+isnull(AL.Incurred_Loss_ALAE_with_SS_NonCat,PS.Incurred_Loss_ALAE_with_SS_NonCat) as Incurred_Loss_ALAE_with_SS_NonCat,
+isnull(AL.Incurred_Loss_ALAE_without_SS,PS.Incurred_Loss_ALAE_without_SS) as Incurred_Loss_ALAE_without_SS,
+isnull(AL.Incurred_Loss_ALAE_with_SS,PS.Incurred_Loss_ALAE_with_SS) as Incurred_Loss_ALAE_with_SS,
+isnull(AL.Capped_Incurred_Loss_ALAE_with_SS,PS.Capped_Incurred_Loss_ALAE_with_SS) as Capped_Incurred_Loss_ALAE_with_SS,
+isnull(AL.Capped_Incurred_Loss_ALAE_with_SS_wo_cat,PS.Capped_Incurred_Loss_ALAE_with_SS_wo_cat) as Capped_Incurred_Loss_ALAE_with_SS_wo_cat,
+isnull(AL.Ult_LDF_Incurred_Loss_ALAE_with_SS,PS.Ult_LDF_Incurred_Loss_ALAE_with_SS) as Ult_LDF_Incurred_Loss_ALAE_with_SS,
+isnull(AL.Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly,PS.Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly) as Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly,
+isnull(AL.Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat,PS.Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat) as Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat,
+isnull(AL.Ult_LDF_Incurred_Loss_ALAE_without_SS,PS.Ult_LDF_Incurred_Loss_ALAE_without_SS) as Ult_LDF_Incurred_Loss_ALAE_without_SS,
+isnull(AL.Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly,PS.Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly) as Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly,
+isnull(AL.Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat,PS.Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat) as Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat,
+isnull(AL.Ult_LDF_Capped_Inc_Loss_ALAE_with_SS,PS.Ult_LDF_Capped_Inc_Loss_ALAE_with_SS) as Ult_LDF_Capped_Inc_Loss_ALAE_with_SS,
+isnull(AL.Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat,PS.Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat) as Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat,
+isnull(AL.Reported_Claims,PS.Reported_Claims) as Reported_Claims,
+isnull(AL.Open_Claims,PS.Open_Claims) as Open_Claims,
+isnull(AL.Closed_With_Pay_Claims,PS.Closed_With_Pay_Claims) as Closed_With_Pay_Claims,
+isnull(AL.Closed_Without_Pay_Claims,PS.Closed_Without_Pay_Claims) as Closed_Without_Pay_Claims,
+isnull(AL.Incurred_Claims,PS.Incurred_Claims) as Incurred_Claims,
+PS.Experience_Product_Group,
+ 	AL3.Case_Loss as Case_Loss_PremSt,
+	AL3.Case_ALAE as Case_ALAE_PremSt,
+	AL3.Paid_Loss as Paid_Loss_PremSt,
+	AL3.Paid_ALAE as Paid_ALAE_PremSt,
+	AL3.Sal_Subro as Sal_Subro_PremSt,
+	AL3.Incurred_Loss_ALAE_with_SS_CatOnly as Incurred_Loss_ALAE_with_SS_CatOnly_PremSt,
+	AL3.Incurred_Loss_ALAE_without_SS_NonCat as Incurred_Loss_ALAE_without_SS_NonCat_PremSt,
+	AL3.Incurred_Loss_ALAE_without_SS_CatOnly as Incurred_Loss_ALAE_without_SS_CatOnly_PremSt,
+	AL3.Incurred_Loss_ALAE_with_SS_NonCat as Incurred_Loss_ALAE_with_SS_NonCat_PremSt,
+	AL3.Incurred_Loss_ALAE_without_SS as Incurred_Loss_ALAE_without_SS_PremSt,
+	AL3.Incurred_Loss_ALAE_with_SS as Incurred_Loss_ALAE_with_SS_PremSt,
+	AL3.Capped_Incurred_Loss_ALAE_with_SS as Capped_Incurred_Loss_ALAE_with_SS_PremSt,
+	AL3.Capped_Incurred_Loss_ALAE_with_SS_wo_cat as Capped_Incurred_Loss_ALAE_with_SS_wo_cat_PremSt,
+	AL3.Ult_LDF_Incurred_Loss_ALAE_with_SS as Ult_LDF_Incurred_Loss_ALAE_with_SS_PremSt,
+	AL3.Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly as Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly_PremSt,
+	AL3.Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat as Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat_PremSt,
+	AL3.Ult_LDF_Incurred_Loss_ALAE_without_SS as Ult_LDF_Incurred_Loss_ALAE_without_SS_PremSt,
+	AL3.Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly as Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly_PremSt,
+	AL3.Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat as Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat_PremSt,
+	AL3.Ult_LDF_Capped_Inc_Loss_ALAE_with_SS as Ult_LDF_Capped_Inc_Loss_ALAE_with_SS_PremSt,
+	AL3.Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat as Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat_PremSt,
+	AL3.Reported_Claims as Reported_Claims_PremSt,
+	AL3.Open_Claims as Open_Claims_PremSt,
+	AL3.Closed_With_Pay_Claims as Closed_With_Pay_Claims_PremSt,
+	AL3.Closed_Without_Pay_Claims as Closed_Without_Pay_Claims_PremSt,
+	AL3.Incurred_Claims as Incurred_Claims_PremSt,
+ps.Commission_pct,
+ps.Commission_dollars,
+ps.Commission_Premiums,
+ps.FA_Number_of_Buildings,
+ps.FA_Number_of_Locations,
+ps.TIV,
+ps.Term_Factor,
+ps.Written_Premium_Policy_FireAllied,
+ps.Earned_Buildings,
+ps.Earned_Locations,
+ps.Earned_TIV,
+ps.Earned_Buildings_Total,
+ps.Earned_Locations_Total,
+ps.Earned_TIV_Total
+
+
+into Act_Detailed_Experience.dbo.ALL_POLICIES_12_premium_summary_temp
+from Act_Detailed_Experience.dbo.ALL_POLICIES_12_premium_summary_work PS
+left outer join Act_Detailed_Experience.dbo.ALL_POLICIES_12_Detail_Information_2_work AL
+	on PS.policynumber = AL.policynumber
+	--and PS.productcode = AL.productcode
+	and PS.experienceproduct = AL.ExperienceProduct
+	and PS.statecode = AL.Accident_State_for_join
+	and PS.Coverage_Group = AL.Coverage_group 
+	and PS.Coverage_Form = AL.coverage_form
+	and PS.acctngyear = AL.Accident_Year
+	and PS.Fiscal_AY_Month_Ending = AL.Fiscal_AY_Month_Ending
+	and PS.Fiscal_AY_Year = AL.Fiscal_AY_Year
+left outer join Act_Detailed_Experience.dbo.ALL_POLICIES_12_Detail_Information_3_work AL3 
+on PS.policynumber = AL3.policynumber
+	and PS.experienceproduct = AL3.ExperienceProduct
+	and PS.statecode = AL3.Statecode
+	and PS.Coverage_Group = AL3.Coverage_group 
+	and PS.Coverage_Form = AL3.coverage_form
+	and PS.acctngyear = AL3.Accident_Year
+	and PS.Fiscal_AY_Month_Ending = AL3.Fiscal_AY_Month_Ending
+	and PS.Fiscal_AY_Year = AL3.Fiscal_AY_Year
+
+
+
+-----------------------------------------------------------------------------------
+
+
+
+
+insert into Act_Detailed_Experience.dbo.ALL_POLICIES_12_premium_summary_temp
+select
+	accountnumber = AL.accountnumber,
+	Policynumber = AL.Policynumber,
+	policyeffectivedate = NULL,
+--	policyexpirationdate = NULL,
+	statecode = AL.statecode,
+--	Coverage_id = AL.Coverage_id,
+	Coverage_group = AL.Coverage_group,
+	isnull(crg.Coverage_Reporting_Group,''Other'') as Coverage_Reporting_group,
+	Coverage_Form = AL.Coverage_Form,
+	productcode = AL.productcode,
+	experienceproduct = AL.ExperienceProduct,
+	Fiscal_AY_Month_Ending = AL.Fiscal_AY_Month_Ending,
+	Fiscal_AY_Year = AL.Fiscal_AY_Year,
+	acctngyear = AL.Accident_Year,
+	Last_Reporting_Year = AL.Loss_Evaluation_Year,
+	Last_Reporting_Month = AL.Loss_Evaluation_Month,
+	currentwrittenpremium = 0.0,
+	currentearnedpremium = 0.0,
+	Policy_count_All_Cov_Combined = 0.0,
+	Policy_count_Reporting_Coverage = 0.0,
+	Policy_count_Coverage_Group = 0.0,
+	Policy_count_All_Cov_Combined_Total= 0,
+	Policy_count_Reporting_Coverage_Total= 0,
+	Policy_count_Coverage_Group_Total= 0,
+	Policy_count_All_Cov_Combined_WP= 0,
+	Policy_count_Reporting_Coverage_WP= 0,
+	Policy_count_Coverage_Group_WP= 0,
+
+
+	Loss_Evaluation_Month = AL.Loss_Evaluation_Month,
+	Loss_Evaluation_Year = AL.Loss_Evaluation_Year,
+	Loss_ALAE_Cap = AL.Loss_ALAE_Cap,
+
+	COL_Breach_of_Contract_Count = 0,
+	COL_Breach_of_Contract_Count_rptd = 0,
+	COL_Breach_of_Contract_Loss = 0,
+	COL_Discrimination_Count = 0,
+	COL_Discrimination_Count_rptd = 0,
+	COL_Discrimination_Loss = 0,
+	COL_Wrongful_Termination_Count = 0,
+	COL_Wrongful_Termination_Count_rptd = 0,
+	COL_Wrongful_Termination_Loss = 0,
+	COL_Harrassment_Count = 0,
+	COL_Harrassment_Count_rptd = 0,
+	COL_Harrassment_Loss = 0,
+	COL_DO_Other_Count = 0,
+	COL_DO_Other_Count_rptd = 0,
+	COL_DO_Other_Loss = 0,
+	COL_EPL_Other_Count = 0,
+	COL_EPL_Other_Count_rptd = 0,
+	COL_EPL_Other_Loss = 0,
+	COL_Fiduciary_Other_Count = 0,
+	COL_Fiduciary_Other_Count_rptd = 0,
+	COL_Fiduciary_Other_Loss = 0,
+	COL_Worplace_Violence_Other_Count = 0,
+	COL_Worplace_Violence_Other_Count_rptd = 0,
+	COL_Worplace_Violence_Other_Loss = 0,
+	COL_Internet_Other_Count = 0,
+	COL_Internet_Other_Count_rptd = 0,
+	COL_Internet_Other_Loss = 0,
+	COL_SLD_All_Other_Count = 0,
+	COL_SLD_All_Other_Count_rptd = 0,
+	COL_SLD_All_Other_Loss = 0,
+
+	COL_AE_Breach_of_Contract_Count = 0,
+	COL_AE_Breach_of_Contract_Count_rptd = 0,
+	COL_AE_Breach_of_Contract_Loss = 0,
+	COL_AE_Breach_of_Fiduciary_Liability_Count = 0,
+	COL_AE_Breach_of_Fiduciary_Liability_Count_rptd = 0,
+	COL_AE_Breach_of_Fiduciary_Liability_Loss = 0,
+	COL_AE_Financial_Advisor_Count = 0,
+	COL_AE_Financial_Advisor_Count_rptd = 0,
+	COL_AE_Financial_Advisor_Loss = 0,
+	COL_AE_Misconduct_Count = 0,
+	COL_AE_Misconduct_Count_rptd = 0,
+	COL_AE_Misconduct_Loss = 0,
+	COL_AE_Wills_Estate_Count = 0,
+	COL_AE_Wills_Estate_Count_rptd = 0,
+	COL_AE_Wills_Estate_Loss = 0,
+	COL_AE_Corporate_Count = 0,
+	COL_AE_Corporate_Count_rptd = 0,
+	COL_AE_Corporate_Loss = 0,
+	COL_AE_Tax_Liability_Count = 0,
+	COL_AE_Tax_Liability_Count_rptd = 0,
+	COL_AE_Tax_Liability_Loss = 0,
+	COL_AE_Violation_GAAP_Count = 0,
+	COL_AE_Violation_GAAP_Count_rptd = 0,
+	COL_AE_Violation_GAAP_Loss = 0,
+	COL_AE_All_Other_Count = 0,
+	COL_AE_All_Other_Count_rptd = 0,
+	COL_AE_All_Other_Loss = 0,
+
+	COL_CL_Breach_of_Contract_Count = 0,
+	COL_CL_Breach_of_Contract_Count_rptd = 0,
+	COL_CL_Breach_of_Contract_Loss = 0,
+	COL_CL_Breach_of_Fiduciary_Liability_Count = 0,
+	COL_CL_Breach_of_Fiduciary_Liability_Count_rptd = 0,
+	COL_CL_Breach_of_Fiduciary_Liability_Loss = 0,
+	COL_CL_Financial_Advisor_Count = 0,
+	COL_CL_Financial_Advisor_Count_rptd = 0,
+	COL_CL_Financial_Advisor_Loss = 0,
+	COL_CL_Misconduct_Count = 0,
+	COL_CL_Misconduct_Count_rptd = 0,
+	COL_CL_Misconduct_Loss = 0,
+	COL_CL_Wills_Estate_Count = 0,
+	COL_CL_Wills_Estate_Count_rptd = 0,
+	COL_CL_Wills_Estate_Loss = 0,
+	COL_CL_Corporate_Count = 0,
+	COL_CL_Corporate_Count_rptd = 0,
+	COL_CL_Corporate_Loss = 0,
+	COL_CL_Tax_Liability_Count = 0,
+	COL_CL_Tax_Liability_Count_rptd = 0,
+	COL_CL_Tax_Liability_Loss = 0,
+	COL_CL_Violation_GAAP_Count = 0,
+	COL_CL_Violation_GAAP_Count_rptd = 0,
+	COL_CL_Violation_GAAP_Loss = 0,
+	COL_CL_Negligent_Training_Count = 0,
+	COL_CL_Negligent_Training_Count_rptd = 0,
+	COL_CL_Negligent_Training_Loss = 0,
+	COL_CL_Electronic_Data_Damage_Count = 0,
+	COL_CL_Electronic_Data_Damage_Count_rptd = 0,
+	COL_CL_Electronic_Data_Damage_Loss = 0,
+	COL_CL_All_Other_Count = 0,
+	COL_CL_All_Other_Count_rptd = 0,
+	COL_CL_All_Other_Loss = 0,
+
+	COL_GLBI_Malpractice_Count= 0,
+	COL_GLBI_Malpractice_Count_rptd= 0,
+	COL_GLBI_Malpractice_Loss = 0,
+	COL_GLBI_Fraud_Breach_of_Contract_Count = 0,
+	COL_GLBI_Fraud_Breach_of_Contract_Count_rptd = 0,
+	COL_GLBI_Fraud_Breach_of_Contract_Loss = 0,
+	COL_GLBI_Injury_Count = 0,
+	COL_GLBI_Injury_Count_rptd = 0,
+	COL_GLBI_Injury_Loss = 0,
+	COL_GLBI_Other_Count = 0,
+	COL_GLBI_Other_Count_rptd = 0,
+	COL_GLBI_Other_Loss = 0,
+	COL_GLBI_Sexual_Assault_Molest_Abuse_Count = 0,
+	COL_GLBI_Sexual_Assault_Molest_Abuse_Count_rptd = 0,
+	COL_GLBI_Sexual_Assault_Molest_Abuse_Loss = 0,
+	COL_GLBI_PropertyDamage_Count = 0,
+	COL_GLBI_PropertyDamage_Count_rptd = 0,
+	COL_GLBI_PropertyDamage_Loss = 0,
+	COL_GLBI_Theft_Count = 0,
+	COL_GLBI_Theft_Count_rptd = 0,
+	COL_GLBI_Theft_Loss = 0,
+	COL_GLBI_SlanderDefamtion_Count = 0,
+	COL_GLBI_SlanderDefamtion_Count_rptd = 0,
+	COL_GLBI_SlanderDefamtion_Loss = 0,
+	COL_GLBI_Discrim_WrongfulTermination_Count = 0,
+	COL_GLBI_Discrim_WrongfulTermination_Count_rptd = 0,
+	COL_GLBI_Discrim_WrongfulTermination_Loss = 0,
+
+	COL_Prop_Fire_Lightning_Explosion_Count = 0,
+	COL_Prop_Fire_Lightning_Explosion_Count_rptd = 0,
+	COL_Prop_Fire_Lightning_Explosion_Loss = 0,
+	COL_Prop_Theft_Van_Count = 0,
+	COL_Prop_Theft_Van_Count_rptd = 0,
+	COL_Prop_Theft_Van_Loss = 0,
+	COL_Prop_Water_Sprinkler_Count = 0,
+	COL_Prop_Water_Sprinkler_Count_rptd = 0,
+	COL_Prop_Water_Sprinkler_Loss = 0,
+	COL_Prop_Water_Other_Count = 0,
+	COL_Prop_Water_Other_Count_rptd = 0,
+	COL_Prop_Water_Other_Loss = 0,
+	COL_Prop_Wind_Hail_Count = 0,
+	COL_Prop_Wind_Hail_Count_rptd = 0,
+	COL_Prop_Wind_Hail_Loss = 0,
+	COL_Prop_Other_Count = 0,
+	COL_Prop_Other_Count_rptd = 0,
+	COL_Prop_Other_Loss = 0,
+
+	COL_AUTO_LIAB_AllOther_Count = 0,
+	COL_AUTO_LIAB_AllOther_Count_rptd = 0,
+	COL_AUTO_LIAB_AllOther_Loss = 0,
+	COL_AUTO_LIAB_PropDam_Count = 0,
+	COL_AUTO_LIAB_PropDam_Count_rptd = 0,
+	COL_AUTO_LIAB_PropDam_Loss = 0,
+
+	COL_AUTO_PHYS_Coll_Count = 0,
+	COL_AUTO_PHYS_Coll_Count_rptd = 0,
+	COL_AUTO_PHYS_Coll_Loss = 0,
+	COL_AUTO_PHYS_Glass_Count = 0,
+	COL_AUTO_PHYS_Glass_Count_rptd = 0,
+	COL_AUTO_PHYS_Glass_Loss = 0,
+	COL_AUTO_PHYS_Other_Count = 0,
+	COL_AUTO_PHYS_Other_Count_rptd = 0,
+	COL_AUTO_PHYS_Other_Loss = 0,
+	COL_AUTO_PHYS_Theft_Count = 0,
+	COL_AUTO_PHYS_Theft_Count_rptd = 0,
+	COL_AUTO_PHYS_Theft_Loss = 0,
+
+	Case_Loss = 0,
+	Case_ALAE = 0,
+	Paid_Loss = 0,
+	Paid_ALAE = 0,
+	Sal_Subro = 0,	
+	Incurred_Loss_ALAE_with_SS_CatOnly = 0,
+	Incurred_Loss_ALAE_without_SS_NonCat = 0,
+	Incurred_Loss_ALAE_without_SS_CatOnly = 0,
+	Incurred_Loss_ALAE_with_SS_NonCat = 0,
+	Incurred_Loss_ALAE_without_SS = 0,
+	Incurred_Loss_ALAE_with_SS = 0,
+	Capped_Incurred_Loss_ALAE_with_SS = 0,
+	Capped_Incurred_Loss_ALAE_with_SS_wo_cat = 0,
+
+	Ult_LDF_Incurred_Loss_ALAE_with_SS = 0,
+	Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly = 0,
+	Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat = 0,
+	Ult_LDF_Incurred_Loss_ALAE_without_SS = 0,
+	Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly = 0,
+	Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat = 0,
+	Ult_LDF_Capped_Inc_Loss_ALAE_with_SS = 0,
+	Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat = 0,
+
+	Reported_Claims = 0,
+	Open_Claims = 0,
+	Closed_With_Pay_Claims = 0,
+	Closed_Without_Pay_Claims = 0,
+	Incurred_Claims = 0,
+	
+	Experience_Product_Group = null,
+	Case_Loss_PremSt = AL.Case_Loss,
+	Case_ALAE_PremSt = AL.Case_ALAE,
+	Paid_Loss_PremSt = AL.Paid_Loss,
+	Paid_ALAE_PremSt = AL.Paid_ALAE,
+	Sal_Subro_PremSt = AL.Sal_Subro,	
+	Incurred_Loss_ALAE_with_SS_CatOnly_PremSt = AL.Incurred_Loss_ALAE_with_SS_CatOnly,
+	Incurred_Loss_ALAE_without_SS_NonCat_PremSt = AL.Incurred_Loss_ALAE_without_SS_NonCat,
+	Incurred_Loss_ALAE_without_SS_CatOnly_PremSt = AL.Incurred_Loss_ALAE_without_SS_CatOnly,
+	Incurred_Loss_ALAE_with_SS_NonCat_PremSt = AL.Incurred_Loss_ALAE_with_SS_NonCat,
+	Incurred_Loss_ALAE_without_SS_PremSt = AL.Incurred_Loss_ALAE_without_SS,
+	Incurred_Loss_ALAE_with_SS_PremSt = AL.Incurred_Loss_ALAE_with_SS,
+	Capped_Incurred_Loss_ALAE_with_SS_PremSt = AL.Capped_Incurred_Loss_ALAE_with_SS,
+	Capped_Incurred_Loss_ALAE_with_SS_wo_cat_PremSt = AL.Capped_Incurred_Loss_ALAE_with_SS_wo_cat,
+
+	Ult_LDF_Incurred_Loss_ALAE_with_SS_PremSt = AL.Ult_LDF_Incurred_Loss_ALAE_with_SS,
+	Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly_PremSt = AL.Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly,
+	Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat_PremSt = AL.Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat,
+	Ult_LDF_Incurred_Loss_ALAE_without_SS_PremSt = AL.Ult_LDF_Incurred_Loss_ALAE_without_SS ,
+	Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly_PremSt = AL.Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly,
+	Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat_PremSt = AL.Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat,
+	Ult_LDF_Capped_Inc_Loss_ALAE_with_SS_PremSt = AL.Ult_LDF_Capped_Inc_Loss_ALAE_with_SS,
+	Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat_PremSt = AL.Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat,
+
+	Reported_Claims_PremSt = AL.Reported_Claims,
+	Open_Claims_PremSt = AL.Open_Claims,
+	Closed_With_Pay_Claims_PremSt = AL.Closed_With_Pay_Claims,
+	Closed_Without_Pay_Claims_PremSt = AL.Closed_Without_Pay_Claims,
+	Incurred_Claims_PremSt = AL.Incurred_Claims,
+	null as Commission_pct,
+	null as Commission_dollars,
+	null as Commission_Premiums,
+	null as FA_Number_of_Buildings,
+	null as FA_Number_of_Locations,
+	null as TIV,
+	null as Term_Factor,
+	null as Written_Premium_Policy_FireAllied,
+	null as Earned_Buildings,
+	null as Earned_Locations,
+	null as Earned_TIV,
+	null as Earned_Buildings_Total,
+	null as Earned_Locations_Total,
+	null as Earned_TIV_Total
+
+from (
+select AL1.*, 
+	p_policynumber = PS.policynumber
+from Act_Detailed_Experience.dbo.ALL_POLICIES_12_Detail_Information_3_work AL1
+left join Act_Detailed_Experience.dbo.ALL_POLICIES_12_premium_summary_work PS
+on PS.policynumber = AL1.policynumber
+	and PS.experienceproduct = AL1.ExperienceProduct
+	and PS.statecode = AL1.Statecode
+	and PS.Coverage_Group = AL1.Coverage_group 
+	and PS.Coverage_Form = AL1.coverage_form
+	and PS.acctngyear = AL1.Accident_Year
+	and PS.Fiscal_AY_Month_Ending = AL1.Fiscal_AY_Month_Ending
+	and PS.Fiscal_AY_Year = AL1.Fiscal_AY_Year
+) as AL
+left outer join Act_Definitions.dbo.Coverage_Reporting_Groups crg
+on AL.Coverage_Group=crg.Coverage_Group
+where AL.p_policynumber is null
+
+ 
+
+/* Step 3 */
+/* Add in the Experience Product Grouping */
+
+select [accountnumber]
+      ,[policynumber]
+      ,[policyeffectivedate]
+      ,[statecode]
+      ,[Coverage_Group]
+      ,[Coverage_Reporting_group]
+      ,[Coverage_Form]
+      ,[productcode]
+      ,[experienceproduct]
+      ,[Fiscal_AY_Month_Ending]
+      ,[Fiscal_AY_Year]
+      ,[acctngyear]
+      ,[Last_Reporting_Year]
+      ,[Last_Reporting_Month]
+      ,[currentwrittenpremium]
+      ,[currentearnedpremium]
+      ,[Policy_count_All_Cov_Combined_WP]
+      ,[Policy_count_Reporting_Coverage_WP]
+      ,[Policy_count_Coverage_Group_WP]
+      ,[Policy_count_All_Cov_Combined]
+      ,[Policy_count_Reporting_Coverage]
+      ,[Policy_count_Coverage_Group]
+      ,[Policy_count_All_Cov_Combined_Total]
+      ,[Policy_count_Reporting_Coverage_Total]
+      ,[Policy_count_Coverage_Group_Total]
+      ,[Loss_Evaluation_Month]
+      ,[Loss_Evaluation_Year]
+      ,[Loss_ALAE_Cap]
+      ,[COL_Breach_of_Contract_Count]
+      ,[COL_Breach_of_Contract_Count_rptd]
+      ,[COL_Breach_of_Contract_Loss]
+      ,[COL_Discrimination_Count]
+      ,[COL_Discrimination_Count_rptd]
+      ,[COL_Discrimination_Loss]
+      ,[COL_Wrongful_Termination_Count]
+      ,[COL_Wrongful_Termination_Count_rptd]
+      ,[COL_Wrongful_Termination_Loss]
+      ,[COL_Harrassment_Count]
+      ,[COL_Harrassment_Count_rptd]
+      ,[COL_Harrassment_Loss]
+      ,[COL_DO_Other_Count]
+      ,[COL_DO_Other_Count_rptd]
+      ,[COL_DO_Other_Loss]
+      ,[COL_EPL_Other_Count]
+      ,[COL_EPL_Other_Count_rptd]
+      ,[COL_EPL_Other_Loss]
+      ,[COL_Fiduciary_Other_Count]
+      ,[COL_Fiduciary_Other_Count_rptd]
+      ,[COL_Fiduciary_Other_Loss]
+      ,[COL_Worplace_Violence_Other_Count]
+      ,[COL_Worplace_Violence_Other_Count_rptd]
+      ,[COL_Worplace_Violence_Other_Loss]
+      ,[COL_Internet_Other_Count]
+      ,[COL_Internet_Other_Count_rptd]
+      ,[COL_Internet_Other_Loss]
+      ,[COL_SLD_All_Other_Count]
+      ,[COL_SLD_All_Other_Count_rptd]
+      ,[COL_SLD_All_Other_Loss]
+      ,[COL_AE_Breach_of_Contract_Count]
+      ,[COL_AE_Breach_of_Contract_Count_rptd]
+      ,[COL_AE_Breach_of_Contract_Loss]
+      ,[COL_AE_Breach_of_Fiduciary_Liability_Count]
+      ,[COL_AE_Breach_of_Fiduciary_Liability_Count_rptd]
+      ,[COL_AE_Breach_of_Fiduciary_Liability_Loss]
+      ,[COL_AE_Financial_Advisor_Count]
+      ,[COL_AE_Financial_Advisor_Count_rptd]
+      ,[COL_AE_Financial_Advisor_Loss]
+      ,[COL_AE_Misconduct_Count]
+      ,[COL_AE_Misconduct_Count_rptd]
+      ,[COL_AE_Misconduct_Loss]
+      ,[COL_AE_Wills_Estate_Count]
+      ,[COL_AE_Wills_Estate_Count_rptd]
+      ,[COL_AE_Wills_Estate_Loss]
+      ,[COL_AE_Corporate_Count]
+      ,[COL_AE_Corporate_Count_rptd]
+      ,[COL_AE_Corporate_Loss]
+      ,[COL_AE_Tax_Liability_Count]
+      ,[COL_AE_Tax_Liability_Count_rptd]
+      ,[COL_AE_Tax_Liability_Loss]
+      ,[COL_AE_Violation_GAAP_Count]
+      ,[COL_AE_Violation_GAAP_Count_rptd]
+      ,[COL_AE_Violation_GAAP_Loss]
+      ,[COL_AE_All_Other_Count]
+      ,[COL_AE_All_Other_Count_rptd]
+      ,[COL_AE_All_Other_Loss]
+      ,[COL_CL_Breach_of_Contract_Count]
+      ,[COL_CL_Breach_of_Contract_Count_rptd]
+      ,[COL_CL_Breach_of_Contract_Loss]
+      ,[COL_CL_Breach_of_Fiduciary_Liability_Count]
+      ,[COL_CL_Breach_of_Fiduciary_Liability_Count_rptd]
+      ,[COL_CL_Breach_of_Fiduciary_Liability_Loss]
+      ,[COL_CL_Financial_Advisor_Count]
+      ,[COL_CL_Financial_Advisor_Count_rptd]
+      ,[COL_CL_Financial_Advisor_Loss]
+      ,[COL_CL_Misconduct_Count]
+      ,[COL_CL_Misconduct_Count_rptd]
+      ,[COL_CL_Misconduct_Loss]
+      ,[COL_CL_Wills_Estate_Count]
+      ,[COL_CL_Wills_Estate_Count_rptd]
+      ,[COL_CL_Wills_Estate_Loss]
+      ,[COL_CL_Corporate_Count]
+      ,[COL_CL_Corporate_Count_rptd]
+      ,[COL_CL_Corporate_Loss]
+      ,[COL_CL_Tax_Liability_Count]
+      ,[COL_CL_Tax_Liability_Count_rptd]
+      ,[COL_CL_Tax_Liability_Loss]
+      ,[COL_CL_Violation_GAAP_Count]
+      ,[COL_CL_Violation_GAAP_Count_rptd]
+      ,[COL_CL_Violation_GAAP_Loss]
+      ,[COL_CL_Negligent_Training_Count]
+      ,[COL_CL_Negligent_Training_Count_rptd]
+      ,[COL_CL_Negligent_Training_Loss]
+      ,[COL_CL_Electronic_Data_Damage_Count]
+      ,[COL_CL_Electronic_Data_Damage_Count_rptd]
+      ,[COL_CL_Electronic_Data_Damage_Loss]
+      ,[COL_CL_All_Other_Count]
+      ,[COL_CL_All_Other_Count_rptd]
+      ,[COL_CL_All_Other_Loss]
+      ,[COL_GLBI_Malpractice_Count]
+      ,[COL_GLBI_Malpractice_Count_rptd]
+      ,[COL_GLBI_Malpractice_Loss]
+      ,[COL_GLBI_Fraud_Breach_of_Contract_Count]
+      ,[COL_GLBI_Fraud_Breach_of_Contract_Count_rptd]
+      ,[COL_GLBI_Fraud_Breach_of_Contract_Loss]
+      ,[COL_GLBI_Injury_Count]
+      ,[COL_GLBI_Injury_Count_rptd]
+      ,[COL_GLBI_Injury_Loss]
+      ,[COL_GLBI_Other_Count]
+      ,[COL_GLBI_Other_Count_rptd]
+      ,[COL_GLBI_Other_Loss]
+      ,[COL_GLBI_Sexual_Assault_Molest_Abuse_Count]
+      ,[COL_GLBI_Sexual_Assault_Molest_Abuse_Count_rptd]
+      ,[COL_GLBI_Sexual_Assault_Molest_Abuse_Loss]
+      ,[COL_GLBI_PropertyDamage_Count]
+      ,[COL_GLBI_PropertyDamage_Count_rptd]
+      ,[COL_GLBI_PropertyDamage_Loss]
+      ,[COL_GLBI_Theft_Count]
+      ,[COL_GLBI_Theft_Count_rptd]
+      ,[COL_GLBI_Theft_Loss]
+      ,[COL_GLBI_SlanderDefamtion_Count]
+      ,[COL_GLBI_SlanderDefamtion_Count_rptd]
+      ,[COL_GLBI_SlanderDefamtion_Loss]
+      ,[COL_GLBI_Discrim_WrongfulTermination_Count]
+      ,[COL_GLBI_Discrim_WrongfulTermination_Count_rptd]
+      ,[COL_GLBI_Discrim_WrongfulTermination_Loss]
+      ,[COL_Prop_Fire_Lightning_Explosion_Count]
+      ,[COL_Prop_Fire_Lightning_Explosion_Count_rptd]
+      ,[COL_Prop_Fire_Lightning_Explosion_Loss]
+      ,[COL_Prop_Theft_Van_Count]
+      ,[COL_Prop_Theft_Van_Count_rptd]
+      ,[COL_Prop_Theft_Van_Loss]
+      ,[COL_Prop_Water_Sprinkler_Count]
+      ,[COL_Prop_Water_Sprinkler_Count_rptd]
+      ,[COL_Prop_Water_Sprinkler_Loss]
+      ,[COL_Prop_Water_Other_Count]
+      ,[COL_Prop_Water_Other_Count_rptd]
+      ,[COL_Prop_Water_Other_Loss]
+      ,[COL_Prop_Wind_Hail_Count]
+      ,[COL_Prop_Wind_Hail_Count_rptd]
+      ,[COL_Prop_Wind_Hail_Loss]
+      ,[COL_Prop_Other_Count]
+      ,[COL_Prop_Other_Count_rptd]
+      ,[COL_Prop_Other_Loss]
+      ,[COL_AUTO_LIAB_AllOther_Count]
+      ,[COL_AUTO_LIAB_AllOther_Count_rptd]
+      ,[COL_AUTO_LIAB_AllOther_Loss]
+      ,[COL_AUTO_LIAB_PropDam_Count]
+      ,[COL_AUTO_LIAB_PropDam_Count_rptd]
+      ,[COL_AUTO_LIAB_PropDam_Loss]
+      ,[COL_AUTO_PHYS_Coll_Count]
+      ,[COL_AUTO_PHYS_Coll_Count_rptd]
+      ,[COL_AUTO_PHYS_Coll_Loss]
+      ,[COL_AUTO_PHYS_Glass_Count]
+      ,[COL_AUTO_PHYS_Glass_Count_rptd]
+      ,[COL_AUTO_PHYS_Glass_Loss]
+      ,[COL_AUTO_PHYS_Other_Count]
+      ,[COL_AUTO_PHYS_Other_Count_rptd]
+      ,[COL_AUTO_PHYS_Other_Loss]
+      ,[COL_AUTO_PHYS_Theft_Count]
+      ,[COL_AUTO_PHYS_Theft_Count_rptd]
+      ,[COL_AUTO_PHYS_Theft_Loss]
+      ,[Case_Loss]
+      ,[Case_ALAE]
+      ,[Paid_Loss]
+      ,[Paid_ALAE]
+      ,[Sal_Subro]
+      ,[Incurred_Loss_ALAE_with_SS_CatOnly]
+      ,[Incurred_Loss_ALAE_without_SS_NonCat]
+      ,[Incurred_Loss_ALAE_without_SS_CatOnly]
+      ,[Incurred_Loss_ALAE_with_SS_NonCat]
+      ,[Incurred_Loss_ALAE_without_SS]
+      ,[Incurred_Loss_ALAE_with_SS]
+      ,[Capped_Incurred_Loss_ALAE_with_SS]
+      ,[Capped_Incurred_Loss_ALAE_with_SS_wo_cat]
+      ,[Ult_LDF_Incurred_Loss_ALAE_with_SS]
+      ,[Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly]
+      ,[Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat]
+      ,[Ult_LDF_Incurred_Loss_ALAE_without_SS]
+      ,[Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly]
+      ,[Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat]
+      ,[Ult_LDF_Capped_Inc_Loss_ALAE_with_SS]
+      ,[Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat]
+      ,[Reported_Claims]
+      ,[Open_Claims]
+      ,[Closed_With_Pay_Claims]
+      ,[Closed_Without_Pay_Claims]
+      ,[Incurred_Claims]
+      ,cast(EP.LOB as varchar(50)) Experience_Product_Group
+      ,[Case_Loss_PremSt]
+      ,[Case_ALAE_PremSt] 
+      ,[Paid_Loss_PremSt] 
+      ,[Paid_ALAE_PremSt] 
+      ,[Sal_Subro_PremSt] 
+      ,[Incurred_Loss_ALAE_with_SS_CatOnly_PremSt] 
+      ,[Incurred_Loss_ALAE_without_SS_NonCat_PremSt] 
+      ,[Incurred_Loss_ALAE_without_SS_CatOnly_PremSt] 
+      ,[Incurred_Loss_ALAE_with_SS_NonCat_PremSt] 
+      ,[Incurred_Loss_ALAE_without_SS_PremSt] 
+      ,[Incurred_Loss_ALAE_with_SS_PremSt] 
+      ,[Capped_Incurred_Loss_ALAE_with_SS_PremSt] 
+      ,[Capped_Incurred_Loss_ALAE_with_SS_wo_cat_PremSt] 
+      ,[Ult_LDF_Incurred_Loss_ALAE_with_SS_PremSt] 
+      ,[Ult_LDF_Incurred_Loss_ALAE_with_SS_CatOnly_PremSt] 
+      ,[Ult_LDF_Incurred_Loss_ALAE_with_SS_NonCat_PremSt] 
+      ,[Ult_LDF_Incurred_Loss_ALAE_without_SS_PremSt] 
+      ,[Ult_LDF_Incurred_Loss_ALAE_without_SS_CatOnly_PremSt] 
+      ,[Ult_LDF_Incurred_Loss_ALAE_without_SS_NonCat_PremSt] 
+      ,[Ult_LDF_Capped_Inc_Loss_ALAE_with_SS_PremSt] 
+      ,[Ult_LDF_Capped_Incurred_Loss_ALAE_with_SS_wo_cat_PremSt] 
+      ,[Reported_Claims_PremSt] 
+      ,[Open_Claims_PremSt] 
+      ,[Closed_With_Pay_Claims_PremSt] 
+      ,[Closed_Without_Pay_Claims_PremSt] 
+      ,[Incurred_Claims_PremSt]
+      ,[Commission_pct]
+      ,[Commission_dollars]
+      ,[Commission_Premiums]
+      ,[FA_Number_of_Buildings]
+      ,[FA_Number_of_Locations]
+      ,[TIV]
+      ,[Term_Factor]
+      ,[Written_Premium_Policy_FireAllied]
+      ,[Earned_Buildings]
+      ,[Earned_Locations]
+      ,[Earned_TIV]
+      ,[Earned_Buildings_Total]
+      ,[Earned_Locations_Total]
+      ,[Earned_TIV_Total]
+  into Act_Detailed_Experience.dbo.ALL_POLICIES_12_premium_summary_temp2
+from Act_Detailed_Experience.dbo.ALL_POLICIES_12_premium_summary_temp PS
+left outer join Act_Definitions.dbo.Product_Groups_Exp EP
+on EP.Exp_product = ps.experienceproduct
+
+
+drop table ALL_POLICIES_12_premium_summary_work 
+
+drop table ALL_POLICIES_12_premium_summary_temp
+
+exec sp_rename ''ALL_POLICIES_12_premium_summary_temp2'', ''ALL_POLICIES_12_premium_summary_work''
+
+
+
+
+
+
+update Detailed_Experience_Run_Log set End_Time=GETDATE()
+where Step_Name=OBJECT_NAME(@@Procid)
+and Run_Month=(select Last_Reporting_Month from Detailed_Experience_Parameters)
+and Run_Year=(select Last_Reporting_Year from Detailed_Experience_Parameters)
+
+
+
+' 
+END
+GO

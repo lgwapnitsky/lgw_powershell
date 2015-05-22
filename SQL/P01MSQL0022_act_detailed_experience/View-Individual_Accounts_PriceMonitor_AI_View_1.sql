@@ -1,0 +1,96 @@
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[Individual_Accounts_PriceMonitor_AI_View_1]'))
+DROP VIEW [dbo].[Individual_Accounts_PriceMonitor_AI_View_1]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[Individual_Accounts_PriceMonitor_AI_View_1]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW dbo.Individual_Accounts_PriceMonitor_AI_View_1
+AS
+SELECT     PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.POLICY_NUMBER, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.DATA_SOURCE, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.EFFDATE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.EXPDATE, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.STATE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TERRITORY, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.SUBLINE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.COVERAGE, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.CLASS_CODE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.LOCATION, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BUILDING, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.OCCUPANCY, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.COVNUM, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.SUBCOVNUM, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.RISK_TYPE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BLANKET, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PRLNUM, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PREM, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.EXPOSURE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.DEDUCT, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PREM_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.EXP_MOD, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.IND_RATE_MOD, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.SCHED_MOD, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.LOSS_COST, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.IRM006, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.IRM007, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.IRM008, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.LCM, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PACK_MOD, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.RATE_MOD_FAC, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BCEG_FAC, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.ACUBRT, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BRKFAC, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.CNTMLT, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.DEP, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.FNLBRT, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.MRT, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PRTDVCFAC, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC001, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC1OF, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC2OF, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC3OF, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC4OF, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC5OF, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFACOFF, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC1OF5, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC2OF5, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC3OF5, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC4OF5, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC5OF5, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFACOFFPRE, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BASE_RATE_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PACK_MOD_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.LCM_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BCEG_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.ACUBRT_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BRKFAC_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.CNTMLT_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.DEP_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.FNLBRT_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.MRT_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PRTDVCFAC_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC001_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC1OF_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC2OF_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC3OF_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC4OF_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC5OF_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFACOFF_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC1OF5_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC2OF5_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC3OF5_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC4OF5_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC5OF5_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFACOFFPRE_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.zip, 
+                      dbo.Individual_Accounts_for_Reports_View_1.accountnumber, YEAR(PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.EFFDATE) 
+                      AS [Policy Year]
+FROM         dbo.Individual_Accounts_for_Reports_View_1 LEFT OUTER JOIN
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure ON 
+                      dbo.Individual_Accounts_for_Reports_View_1.policynumber = PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.POLICY_NUMBER
+GROUP BY PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.POLICY_NUMBER, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.DATA_SOURCE, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.EFFDATE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.EXPDATE, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.STATE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TERRITORY, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.SUBLINE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.COVERAGE, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.CLASS_CODE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.LOCATION, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BUILDING, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.OCCUPANCY, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.COVNUM, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.SUBCOVNUM, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.RISK_TYPE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BLANKET, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PRLNUM, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PREM, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.EXPOSURE, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.DEDUCT, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PREM_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.EXP_MOD, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.IND_RATE_MOD, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.SCHED_MOD, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.LOSS_COST, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.IRM006, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.IRM007, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.IRM008, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.LCM, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PACK_MOD, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.RATE_MOD_FAC, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BCEG_FAC, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.ACUBRT, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BRKFAC, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.CNTMLT, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.DEP, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.FNLBRT, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.MRT, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PRTDVCFAC, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC001, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC1OF, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC2OF, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC3OF, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC4OF, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC5OF, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFACOFF, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC1OF5, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC2OF5, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC3OF5, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC4OF5, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC5OF5, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFACOFFPRE, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BASE_RATE_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PACK_MOD_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.LCM_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BCEG_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.ACUBRT_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.BRKFAC_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.CNTMLT_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.DEP_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.FNLBRT_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.MRT_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.PRTDVCFAC_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC001_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC1OF_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC2OF_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC3OF_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC4OF_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC5OF_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFACOFF_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC1OF5_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC2OF5_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC3OF5_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC4OF5_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFAC5OF5_IND, 
+                      PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.TMEFACOFFPRE_IND, PriceMonitor.dbo.AQS_DETAIL_AI_PRP_test_exposure.zip, 
+                      dbo.Individual_Accounts_for_Reports_View_1.accountnumber
+' 
+GO

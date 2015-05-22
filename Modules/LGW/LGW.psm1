@@ -1,7 +1,27 @@
-if ( (Get-PSSnapin -Name Quest.ActiveRoles.* -ErrorAction SilentlyContinue) -eq $null )
-{
-	Add-PsSnapin Quest.ActiveRoles.*
+Trap {
+	$err = $_.Exception
+	write-error $err.Message
+	while ( $err.InnerException) 
+	{
+		$err = $err.InnerException
+		Write-Error $err.Message
+	}
+	break;
 }
+
+Set-PSDebug -Strict
+$ErrorActionPreference = "stop"
+
+$fullPathIncFileName = $MyInvocation.MyCommand.Definition
+$currentScriptName = $MyInvocation.MyCommand.Name
+$currentExecutingPath = $fullPathIncFileName.Replace($currentScriptName, "")
+
+#if ( (Get-PSSnapin -Name Quest.ActiveRoles.* -ErrorAction SilentlyContinue) -eq $null )
+#{
+#	Add-PsSnapin Quest.ActiveRoles.*
+#}
+
+#Requires -PSSnapin Quest.ActiveRoles.ADManagement
 
 function get-userinfo
 {
@@ -35,6 +55,18 @@ function get-secgroups
 	(Get-QADUser $username).memberof | foreach { Get-QADGroup $_ | Where-Object { $_.grouptype -match [regex]'(?i)security' } } | Select-Object name,dn | Sort-Object name
 }
 
+function get-nestedsecgroups
+{
+	param(
+		[Parameter(Mandatory=$true)]
+			[string] $username
+	)
+	
+	(Get-QADUser $username).nestedmemberof | foreach { Get-QADGroup $_ | Where-Object { $_.grouptype -match [regex]'(?i)security' } } | Select-Object name,dn | Sort-Object name
+}
+
+
+
 function remote-SharePoint
 {
 	Param
@@ -53,3 +85,26 @@ function remote-SharePoint
 		#Import-PSSession -Session $session -Prefix Remote
 		Enter-PSSession $session
 }
+
+filter colorize-row{
+    param(
+        [string]$color="green",
+        [string]$prop="name",
+        [string]$regex=$(throw "must supply regular expression pattern")
+
+    )
+    
+    # save current console colors
+    #$bgc=[console]::BackgroundColor;
+    $fgc=[console]::ForegroundColor;
+
+    if($_.$prop -match $regex){[console]::ForegroundColor=$color; $_}
+    else{[console]::ForegroundColor=$fgc; $_}
+
+    # revert to saved console colors
+    #[console]::BackgroundColor=$bgc;
+    [console]::ForegroundColor=$fgc; 
+}
+
+#Import-Module $currentExecutingPath\JSON_XML
+

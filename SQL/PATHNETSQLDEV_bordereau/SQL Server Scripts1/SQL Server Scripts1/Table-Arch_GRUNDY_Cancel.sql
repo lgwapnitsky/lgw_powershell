@@ -1,0 +1,154 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Arch_GRUNDY_Cancel]') AND type in (N'U'))
+DROP TABLE [dbo].[Arch_GRUNDY_Cancel]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Arch_GRUNDY_Cancel]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Arch_GRUNDY_Cancel](
+	[Arch_GRUNDY_Cancel_ID] [int] IDENTITY(1,1) NOT NULL,
+	[REC_NUM] [nvarchar](5) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[POLICY_NUM] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[SUB_AGENT] [nvarchar](3) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[ENDORSEMNT] [nvarchar](3) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[INSURED] [nvarchar](25) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[DATE_ISSUE] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[EFFECT_DATE] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[NOTES_01] [nvarchar](74) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[NOTES_02] [nvarchar](74) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[NOTES_03] [nvarchar](74) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[POST_FLAG] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[TTL_RETURN] [nvarchar](7) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[PRORATA] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[CRD_REN] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[PRINT_IND] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[TRANS_FLAG] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[CANCL_CODE] [nvarchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[POL_EFF_DT] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[Update_Date] [datetime] NULL,
+	[TRANSDATE] [nvarchar](8) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+) ON [PRIMARY]
+END
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_REC_NUM]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_REC_NUM]  DEFAULT (' ') FOR [REC_NUM]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_POLICY_NUM]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_POLICY_NUM]  DEFAULT (' ') FOR [POLICY_NUM]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_SUB_AGENT]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_SUB_AGENT]  DEFAULT (' ') FOR [SUB_AGENT]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_ENDORSEMNT]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_ENDORSEMNT]  DEFAULT (' ') FOR [ENDORSEMNT]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_INSURED]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_INSURED]  DEFAULT (' ') FOR [INSURED]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_DATE_ISSUE]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_DATE_ISSUE]  DEFAULT (' ') FOR [DATE_ISSUE]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_EFFECT_DATE]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_EFFECT_DATE]  DEFAULT (' ') FOR [EFFECT_DATE]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_NOTES_01]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_NOTES_01]  DEFAULT (' ') FOR [NOTES_01]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_NOTES_02]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_NOTES_02]  DEFAULT (' ') FOR [NOTES_02]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_NOTES_03]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_NOTES_03]  DEFAULT (' ') FOR [NOTES_03]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_POST_FLAG]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_POST_FLAG]  DEFAULT (' ') FOR [POST_FLAG]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_TTL_RETURN]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_TTL_RETURN]  DEFAULT (' ') FOR [TTL_RETURN]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_PRORATA]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_PRORATA]  DEFAULT (' ') FOR [PRORATA]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_CRD_REN]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_CRD_REN]  DEFAULT (' ') FOR [CRD_REN]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_PRINT_IND]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_PRINT_IND]  DEFAULT (' ') FOR [PRINT_IND]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_TRANS_FLAG]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_TRANS_FLAG]  DEFAULT (' ') FOR [TRANS_FLAG]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_CANCL_CODE]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_CANCL_CODE]  DEFAULT (' ') FOR [CANCL_CODE]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_POL_EFF_DT]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_POL_EFF_DT]  DEFAULT (' ') FOR [POL_EFF_DT]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_Update_Date]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_Update_Date]  DEFAULT (getdate()) FOR [Update_Date]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_Arch_GRUNDY_Cancel_TRANSDATE]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Arch_GRUNDY_Cancel] ADD  CONSTRAINT [DF_Arch_GRUNDY_Cancel_TRANSDATE]  DEFAULT (' ') FOR [TRANSDATE]
+END
+
+GO

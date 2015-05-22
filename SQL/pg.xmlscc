@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFileProjectInfo>
+  <FileProjectInfo>
+    <sUser>CORP\lwapnits</sUser>
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell/SQL</sProjectName>
+    <sFolder>C:\Users\lwapnits\Documents\WindowsPowerShell\SQL</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Laptop|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits\Documents\WindowsPowerShell\SQL\DumpTablesProcsViews.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName />
+    <sFolder>C:\Users\lwapnits\Documents\WindowsPowerShell\SQL</sFolder>
+    <sDbPath />
+    <FileName>C:\Users\lwapnits\Documents\WindowsPowerShell\SQL\DBExport.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser>CORP\lwapnits</sUser>
+    <sProjectName />
+    <sFolder>C:\Users\lwapnits\Documents\WindowsPowerShell\SQL</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Laptop|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits\Documents\WindowsPowerShell\SQL\DBExport.psm1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+</ArrayOfFileProjectInfo>

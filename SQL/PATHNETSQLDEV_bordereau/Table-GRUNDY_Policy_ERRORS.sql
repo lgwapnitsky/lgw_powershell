@@ -1,0 +1,15 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GRUNDY_Policy_ERRORS]') AND type in (N'U'))
+DROP TABLE [dbo].[GRUNDY_Policy_ERRORS]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GRUNDY_Policy_ERRORS]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[GRUNDY_Policy_ERRORS](
+	[GRUNDY_Policy_ID] [int] NOT NULL,
+	[ERROR_ID] [int] NOT NULL
+) ON [PRIMARY]
+END
+GO

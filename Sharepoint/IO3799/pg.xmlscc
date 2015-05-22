@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\Sharepoint\IO3799\suggestionboxtest1.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+  <FileProjectInfo>
+    <sUser />
+    <sProjectName>$/APPLICATION_SUPPORT/WindowsPowerShell</sProjectName>
+    <sFolder>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell</sFolder>
+    <sDbPath>http://teamsuite01:8080/|LGW Workstation|CORP\lwapnits</sDbPath>
+    <FileName>C:\Users\lwapnits.CORP\Documents\WindowsPowerShell\Sharepoint\IO3799\suggestionboxtest2.ps1</FileName>
+    <IsStatusKnown>true</IsStatusKnown>
+    <ProviderName>Team Foundation Server MSSCCI Provider</ProviderName>
+  </FileProjectInfo>
+</ArrayOfFileProjectInfo>
