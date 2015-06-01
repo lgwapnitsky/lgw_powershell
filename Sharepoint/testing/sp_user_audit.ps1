@@ -76,7 +76,7 @@ function UserExistsInAD
 		$search = [System.DirectoryServices.DirectorySearcher]$DOMroot
 		$search.Filter = "(&(objectCategory=User))"
 		$Filter | foreach {
-			$search.Filter = [regex]::Replace($sFilter,"\)$", "($($_)))")
+			$search.Filter = [regex]::Replace($Filter,"\)$", "($($_)))")
 		}
 		$result = $search.FindOne()
 		return $result -ne $null
@@ -162,7 +162,11 @@ function FindAuditUsers()
 				}
 			} 
 		 }	
-		 catch{ Write-Host "Invalid Site: $($site.url)" -ForegroundColor Red}
+		catch
+		{ 
+			Write-Host "Invalid Site: $($site.url)" -ForegroundColor Red
+			Write-Host "$_"	 -ForegroundColor Yellow
+		}
 	}
 	
 	
@@ -230,11 +234,14 @@ function global:Audit-SharepointUsers {
 	(
 		[Parameter(Position=1, Mandatory=$true, ValueFromPipeline=$true)]
 			[string]$WebAppURL,
+						
+			[Parameter(Position=2, Mandatory=$false, ValueFromPipeline=$true)]
+			[string]$SiteURL,
 		
-		[Parameter(Position=2, Mandatory=$true, ValueFromPipeline=$true)]
+		[Parameter(Position=3, Mandatory=$true, ValueFromPipeline=$true)]
 			[string]$Domain,
 			
-		[Parameter(Position=3, Mandatory=$false, ValueFromPipeline=$true)]
+		[Parameter(Position=4, Mandatory=$false, ValueFromPipeline=$true)]
 			[system.array]$Filter,
 
 		[Parameter(Mandatory=$true)]
@@ -247,7 +254,7 @@ function global:Audit-SharepointUsers {
 		$DOM = $(Get-Domain)
 		$DOMroot = $DOM.GetDirectoryEntry()
 		
-		$AuditedUsers = FindAudits
+		$AuditedUsers = FindAuditUsers
 		   
 		Out-Report $($AuditedUsers.Sites) BySite
 		Out-Report $($AuditedUsers.Users) ByUser
