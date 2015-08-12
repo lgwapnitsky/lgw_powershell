@@ -96,7 +96,7 @@ $PSDefaultParameterValues['Format-[wt]*:Autosize'] = $true
 
 
 #module imports
-Import-Module "PowerTab" -ArgumentList "C:\Users\larry.wapnitsky\Documents\WindowsPowerShell\PowerTabConfig.xml"  -ErrorAction SilentlyContinue | out-null
+Import-Module "PowerTab" -ArgumentList "C:\Users\larry.wapnitsky\Documents\My Documents\WindowsPowerShell\PowerTabConfig.xml"  -ErrorAction SilentlyContinue | out-null
 #Import-Module PSCodeGen -ErrorAction SilentlyContinue
 Import-Module EZOut -ErrorAction SilentlyContinue | out-null
 Import-Module FileSystem -ErrorAction SilentlyContinue | out-null

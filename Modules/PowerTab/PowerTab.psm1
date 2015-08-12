@@ -14,7 +14,7 @@ if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object {$_.Manifest
 ## Cleanup
 #########################
 
-$OldTabExpansion = Get-Content Function:TabExpansion2
+$OldTabExpansion = Get-Content Function:TabExpansion
 $Module = $MyInvocation.MyCommand.ScriptBlock.Module 
 $Module.OnRemove = {
     Set-Content Function:\TabExpansion -Value $OldTabExpansion
