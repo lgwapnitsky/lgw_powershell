@@ -1,5 +1,5 @@
 ﻿Add-PSSnapin Quest.ActiveRoles.*
-## only returns Active Roles commands 
+## only returns Active Roles commands
 function get-qcommand
 {
 	if ($args[0] -eq $null)
@@ -17,7 +17,7 @@ Function IsAdmin()
 {
 	$CurrentUser              = [System.Security.Principal.WindowsIdentity]::GetCurrent()
 	$principal                = new-object System.Security.Principal.WindowsPrincipal($CurrentUser)
-	
+
 	switch ($principal.IsInRole("Administrators"))
 	{
 		$true
@@ -47,9 +47,9 @@ Function IsAdmin()
 Function Get-Bits(){
 	Switch ([System.Runtime.InterOpServices.Marshal]::SizeOf([System.IntPtr])) {
 		4 { Return "32-bit" }
-		
+
 		8 { Return "64-bit" }
-		
+
 		default { Return "Unknown Type" }
 	}
 }
@@ -62,25 +62,25 @@ function prompt
 	#Write-Host "# ($(Get-Bits)) $env:username@$env:computername | $Now `n# `[$(((Get-History).Count)+1)`] $(get-location) $($IsAdmin.Marker)" -ForegroundColor Cyan -NoNewLine
 	#Write-Host "# ($(Get-Bits)) $env:username@$env:computername | " -NoNewLine -ForegroundColor cyan
 	Write-Host "# $env:username@$env:computername | " -NoNewLine -ForegroundColor cyan
-	
-	Switch ((get-date).tostring('tt')) 
+
+	Switch ((get-date).tostring('tt'))
 	{
-		'AM'{ 
-				$dateFGColor = "Yellow" 
+		'AM'{
+				$dateFGColor = "Yellow"
 				$dateBGColor = "DarkGray"
 			}
-		'PM'{ 
+		'PM'{
 				$dateFGColor = "DarkGray"
 				$dateBGColor = "Blue"
 			}
 	}
 	Write-Host " $Now" -ForegroundColor $dateFGColor -BackgroundColor $dateBGColor
 	Write-Host "# `[$(((Get-History).Count)+1)`] $(get-location) $($IsAdmin.Marker)" -ForegroundColor Cyan -NoNewLine
-	
+
 	$Host.UI.RawUI.WindowTitle= "$($IsAdmin.Role) - $env:username@$env:computername | $(get-location)"
 	Return " "
 }
-	
+
 
 $IsAdmin = IsAdmin
 
@@ -96,13 +96,14 @@ $PSDefaultParameterValues['Format-[wt]*:Autosize'] = $true
 
 
 #module imports
-Import-Module "PowerTab" -ArgumentList "C:\Users\lwapnits\Documents\WindowsPowerShell\PowerTabConfig.xml"  -ErrorAction SilentlyContinue | out-null
+Import-Module "PowerTab" -ArgumentList "C:\Users\larry.wapnitsky\Documents\WindowsPowerShell\PowerTabConfig.xml"  -ErrorAction SilentlyContinue | out-null
 #Import-Module PSCodeGen -ErrorAction SilentlyContinue
 Import-Module EZOut -ErrorAction SilentlyContinue | out-null
 Import-Module FileSystem -ErrorAction SilentlyContinue | out-null
 Import-Module PSSystemTools -ErrorAction SilentlyContinue | out-null
-Import-Module ScriptCop -ErrorAction SilentlyContinue | out-null
+#Import-Module ScriptCop -ErrorAction SilentlyContinue | out-null
 import-module PSCX -ErrorAction SilentlyContinue | out-null
+Import-Module TabExpansion++
 
 # custom module imports
 Import-Module LGW | out-null

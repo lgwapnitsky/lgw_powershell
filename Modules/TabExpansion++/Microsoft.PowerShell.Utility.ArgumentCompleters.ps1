@@ -1,4 +1,4 @@
-﻿
+
 #
 # Reading the registry for progids takes > 500ms, so we do it at module load time.
 #
@@ -111,7 +111,7 @@ Complete the -EventName argument for Register-ObjectEvent, for example:
 #
 # .SYNOPSIS
 #
-#    Complete the -Name argument to Out-Printer 
+#    Complete the -Name argument to Out-Printer
 #
 function OutPrinterNameArgumentCompletion
 {
@@ -169,4 +169,108 @@ function Ps1xmlPathArgumentCompletion
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
 
     Get-CompletionWithExtension $lastWord '.ps1xml'
+}
+
+
+#
+# .SYNOPSIS
+#
+#    Complete the -SerializationMethod argument to Update-TypeData
+#
+function UpdateTypeDataSerializationMethodCompleter
+{
+    [ArgumentCompleter(
+        Parameter = 'SerializationMethod',
+        Command = 'Update-TypeData',
+        Description = 'Complete the -SerializationMethod argument to Update-TypeData. For example: Update-TypeData -SerializationMethod <TAB>')]
+   param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+
+   $sm = [PSObject].Assembly.GetType('System.Management.Automation.SerializationMethod')
+   [System.Enum]::GetNames($sm) | Where-Object {$_ -like "*$wordToComplete*"} | Sort-Object | Foreach-Object {
+    New-CompletionResult $_ $_
+   }
+}
+
+
+#
+# .SYNOPSIS
+#
+#     Complete the SourceIdentifier argument to Register-EngineEvent
+#
+function EventNameCompletion
+{
+    [ArgumentCompleter(
+        Parameter = 'SourceIdentifier',
+        Command = 'Register-EngineEvent',
+        Description = 'Complete the -SourceIdentifier argument for Register-ObjectEvent, for example: Register-EngineEvent -SourceIdentifier <TAB>'
+    )]
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+
+    [System.Management.Automation.PsEngineEvent].GetFields() | ForEach-Object { $_.GetValue($null) } | Sort-Object | Where-Object {$_ -like "*$wordToComplete*"} | ForEach-Object {
+        New-CompletionResult  $_ $_
+    }
+}
+
+
+#
+# .SYNOPSIS
+#
+#     Complete the TypeName argument to Update-TypeData
+#
+function UpdateTypeTypeNameCompleter
+{
+    [ArgumentCompleter(
+        Parameter = 'TypeName',
+        Command = ('Get-TypeData','Remove-TypeData','Update-TypeData'),
+        Description = 'Complete names of types:  Update-TypeData -TypeName <TAB>'
+    )]
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+
+    [System.Management.Automation.CompletionCompleters]::CompleteType($wordToComplete)
+}
+
+
+#
+# .SYNOPSIS
+#
+#     Complete the Id argument for Disable-PSBreakPoint
+#
+function DisablePSBreakpointIdCompleter
+{
+    [ArgumentCompleter(
+        Parameter = 'Id',
+        Command = ('Disable-PSBreakpoint'),
+        Description = 'Complete Id parameter:  Disable-PSBreakpoint -Id <TAB>'
+    )]
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+
+    Microsoft.PowerShell.Utility\Get-PSBreakpoint | 
+        Where-Object { $_.Enabled -and $_.Id -like "*$wordToComplete*" } |
+        ForEach-Object {
+            $toolTip = "Script: {0} Type: {1}" -f $_.Script, $_.GetType().Name
+            New-CompletionResult $_.Id $toolTip
+        }
+}
+
+
+#
+# .SYNOPSIS
+#
+#     Complete the Id argument for Disable-PSBreakPoint
+#
+function RemovePSBreakpointIdCompleter
+{
+    [ArgumentCompleter(
+        Parameter = 'Id',
+        Command = ('Remove-PSBreakpoint'),
+        Description = 'Complete Id parameter:  Remove-PSBreakpoint -Id <TAB>'
+    )]
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+
+    Microsoft.PowerShell.Utility\Get-PSBreakpoint | 
+        Where-Object { $_.Id -like "*$wordToComplete*" } |
+        ForEach-Object {
+            $toolTip = "Script: {0} Type: {1}" -f $_.Script, $_.GetType().Name
+            New-CompletionResult $_.Id $toolTip
+        }
 }
