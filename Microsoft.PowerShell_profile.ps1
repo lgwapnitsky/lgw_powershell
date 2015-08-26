@@ -114,6 +114,8 @@ New-Item alias:np -value 'C:\Program Files (x86)\Notepad++\notepad++.exe' | out-
 
 # PSDrives
 New-PSDrive -Name PowerShell -Root ~\Documents\WindowsPowerShell -PSProvider FileSystem | out-null
+New-PSDrive -Name Downloads -Root c:\lgwapps\downloads -PSProvider FileSystem | out-null
+New-PSDrive -Name Temp -Root c:\temp -PSProvider FileSystem | out-null
 
 $Shell                        = $Host.UI.RawUI
 

@@ -1,4 +1,3 @@
-#$userinfo =
 foreach ($user in get-qaduser larry.wapnitsky  | where {
     ($_.accountisdisabled -eq $false) -and
     ($_.proxyaddresses -ne $null) })
@@ -58,7 +57,7 @@ foreach ($user in get-qaduser larry.wapnitsky  | where {
   }
 #  else {write-host "exists";}
 
-  set-qaduser $user -ObjectAttributes @{ProxyAddresses = $newpas} | out-null
+  #set-qaduser $user -ObjectAttributes @{ProxyAddresses = $newpas} | out-null
 }
 
 #
