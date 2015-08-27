@@ -30,5 +30,5 @@ $mboxinfo = foreach ($mbx in $(get-mailbox)){
   $info
 }
 
-$mboxinfo | export-csv -notypeinformation name_aliases2.csv
+$mboxinfo | export-csv -notypeinformation name_aliases$(get-date -format yyyyMMdd_HHmmss).csv
 #Remove-PSSession $ex
