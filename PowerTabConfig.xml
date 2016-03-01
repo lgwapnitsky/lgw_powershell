@@ -8,12 +8,6 @@
   </Config>
   <Config>
     <Category>Global</Category>
-    <Name>CustomCompletionChars</Name>
-    <Value>]:)</Value>
-    <Type>String</Type>
-  </Config>
-  <Config>
-    <Category>Global</Category>
     <Name>CustomUserFunction</Name>
     <Value>Write-Warning</Value>
     <Type>String</Type>
@@ -28,6 +22,12 @@
     <Category>Global</Category>
     <Name>AlternateHandler</Name>
     <Value>Dynamic</Value>
+    <Type>String</Type>
+  </Config>
+  <Config>
+    <Category>Global</Category>
+    <Name>CustomCompletionChars</Name>
+    <Value>]:)</Value>
     <Type>String</Type>
   </Config>
   <Config>
@@ -80,12 +80,6 @@
   </Config>
   <Config>
     <Category>ShortcutChars</Category>
-    <Name>CustomFunction</Name>
-    <Value>#</Value>
-    <Type>String</Type>
-  </Config>
-  <Config>
-    <Category>ShortcutChars</Category>
     <Name>Invoke</Name>
     <Value>&amp;</Value>
     <Type>String</Type>
@@ -110,6 +104,12 @@
   </Config>
   <Config>
     <Category>ShortcutChars</Category>
+    <Name>CustomFunction</Name>
+    <Value>#</Value>
+    <Type>String</Type>
+  </Config>
+  <Config>
+    <Category>ShortcutChars</Category>
     <Name>Native</Name>
     <Value>!</Value>
     <Type>String</Type>
@@ -117,13 +117,13 @@
   <Config>
     <Category>Setup</Category>
     <Name>ConfigurationPath</Name>
-    <Value>C:\Users\lwapnits\Documents\WindowsPowerShell\PowerTabConfig.xml</Value>
+    <Value>C:\Users\larry.wapnitsky\Documents\WindowsPowerShell\PowerTabConfig.xml</Value>
     <Type>String</Type>
   </Config>
   <Config>
     <Category>Setup</Category>
     <Name>DatabasePath</Name>
-    <Value>C:\Users\lwapnits\Documents\WindowsPowerShell\TabExpansion.xml</Value>
+    <Value>C:\Users\larry.wapnitsky\Documents\WindowsPowerShell\TabExpansion.xml</Value>
     <Type>String</Type>
   </Config>
   <Config>
@@ -134,7 +134,7 @@
   </Config>
   <Config>
     <Category>Global</Category>
-    <Name>CloseListOnEmptyFilter</Name>
+    <Name>DoubleBorder</Name>
     <Value>1</Value>
     <Type>Bool</Type>
   </Config>
@@ -146,37 +146,13 @@
   </Config>
   <Config>
     <Category>Global</Category>
-    <Name>VisualStudioTabBehavior</Name>
-    <Value>0</Value>
-    <Type>Bool</Type>
-  </Config>
-  <Config>
-    <Category>Global</Category>
-    <Name>ShowBanner</Name>
-    <Value>1</Value>
-    <Type>Bool</Type>
-  </Config>
-  <Config>
-    <Category>Global</Category>
-    <Name>DoubleTabLock</Name>
-    <Value>0</Value>
-    <Type>Bool</Type>
-  </Config>
-  <Config>
-    <Category>Global</Category>
     <Name>DotComplete</Name>
     <Value>1</Value>
     <Type>Bool</Type>
   </Config>
   <Config>
     <Category>Global</Category>
-    <Name>CustomFunctionEnabled</Name>
-    <Value>0</Value>
-    <Type>Bool</Type>
-  </Config>
-  <Config>
-    <Category>Global</Category>
-    <Name>DoubleBorder</Name>
+    <Name>ShowBanner</Name>
     <Value>1</Value>
     <Type>Bool</Type>
   </Config>
@@ -188,13 +164,25 @@
   </Config>
   <Config>
     <Category>Global</Category>
-    <Name>CustomComplete</Name>
+    <Name>DoubleTabLock</Name>
+    <Value>0</Value>
+    <Type>Bool</Type>
+  </Config>
+  <Config>
+    <Category>Global</Category>
+    <Name>AutoExpandOnBackSlash</Name>
     <Value>1</Value>
     <Type>Bool</Type>
   </Config>
   <Config>
     <Category>Global</Category>
-    <Name>AliasQuickExpand</Name>
+    <Name>CustomFunctionEnabled</Name>
+    <Value>0</Value>
+    <Type>Bool</Type>
+  </Config>
+  <Config>
+    <Category>Global</Category>
+    <Name>VisualStudioTabBehavior</Name>
     <Value>0</Value>
     <Type>Bool</Type>
   </Config>
@@ -202,6 +190,18 @@
     <Category>Global</Category>
     <Name>FileSystemExpand</Name>
     <Value>1</Value>
+    <Type>Bool</Type>
+  </Config>
+  <Config>
+    <Category>Global</Category>
+    <Name>CloseListOnEmptyFilter</Name>
+    <Value>1</Value>
+    <Type>Bool</Type>
+  </Config>
+  <Config>
+    <Category>Global</Category>
+    <Name>AliasQuickExpand</Name>
+    <Value>0</Value>
     <Type>Bool</Type>
   </Config>
   <Config>
@@ -236,7 +236,7 @@
   </Config>
   <Config>
     <Category>Global</Category>
-    <Name>AutoExpandOnBackSlash</Name>
+    <Name>CustomComplete</Name>
     <Value>1</Value>
     <Type>Bool</Type>
   </Config>

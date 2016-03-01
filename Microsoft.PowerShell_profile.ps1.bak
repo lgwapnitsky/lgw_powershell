@@ -106,7 +106,7 @@ Import-Module LGW #| out-null
 
 
 #aliases
-New-Item alias:np -value 'C:\lgwapps\Notepad++\notepad++.exe' #| out-null
+New-Item alias:np -value 'C:\Program Files (x86)\Notepad++\notepad++.exe' #| out-null
 
 # PSDrives
 New-PSDrive -Name PowerShell -Root ~\Documents\WindowsPowerShell -PSProvider FileSystem | out-null
